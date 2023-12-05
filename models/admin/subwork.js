@@ -13,9 +13,10 @@ const subworkoutSchema = new mongoose.Schema({
     //     default:null,
     //     ref: 'User'
     // },
-    
+
     user_id: [{
         type: mongoose.Schema.Types.ObjectId,
+        default:null,
         ref: 'User'
     }],
 
