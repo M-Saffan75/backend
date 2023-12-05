@@ -4,12 +4,10 @@ const workoutSchema = new mongoose.Schema({
     
     title: {
         type: String,
-        required: [true, 'Please add the title']
     },
 
     name: {
         type: String,
-        required: [true, 'Please add the name'],
     },
 
     workoutImage: {

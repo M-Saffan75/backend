@@ -41,7 +41,7 @@ const create_feed_post = async (req, res) => {
                 return res.status(400).json({ message: 'All Fields and Image Are Required' });
             }
             const userId = req.user._id;
-            console.log('userId>>>???', userId)
+            // console.log('userId>>>???', userId)
 
             const userFeed = await Feed({
                 user_id: userId,
@@ -93,11 +93,13 @@ const create_feed_post = async (req, res) => {
 const fetch_feed = async (req, res) => {
     try {
         const userId = req.user._id;
+        // console.log('userId>>',req?.user?._id)
+        // return
         const feeds = await Feed.find().populate('user_id');
         
         if (!feeds || feeds.length === 0) {
             return res.status(404).json({ message: 'Feeds not found.' });
-        }
+        } 
 
         feeds.forEach(feed => {
             feed.likedUsers.length;
@@ -298,8 +300,8 @@ const Remove_feed_post = async (req, res) => {
 
         const feedId = await Feed.findById(req.params.id);
         const userId = req.user._id;
-        console.log(feedId)
-        console.log(userId)
+        // console.log(feedId)
+        // console.log(userId)
         await Feed.deleteOne({ _id: req.params.id });
         return res.status(200).json({ message: 'Feed Post Successfully Deleted', code: 200 });
 

@@ -1,4 +1,5 @@
 const multer = require('multer');
+const SubWork = require('../../models/admin/subwork.js');
 const Work = require('../../models/admin/workout.js');
 
 
@@ -15,11 +16,6 @@ const storage = multer.diskStorage({
 });
 
 const workoutImage = multer({ storage: storage });
-
-
-/* Work Image Here End */
-
-
 
 /* <><><><><>----------------------<><><><><> */
 
@@ -49,6 +45,7 @@ const Create_workout = async (req, res) => {
                 name,
                 workoutImage: req.file.filename
             });
+
             await work.save();
             res.status(200).json({ message: 'Workout Create successfully', workout: work, code: 200 });
         });
@@ -69,10 +66,94 @@ const Create_workout = async (req, res) => {
 /* http://localhost:5000/api/task/fetch/task */
 
 
+// const Get_Workout = async (req, res) => {
+//     try {
+//         const works = await Work.find();
+//         return res.status(200).json({ message: 'Work Retrieved Successfully', work: works, code: 200 });
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+//     }
+// };
+
+// const Get_Workout = async (req, res) => {
+//     try {
+//         const works = await Work.find();
+
+//         const worksWithSubWork = await Promise.all(works.map(async (work) => {
+//             const subWork = await SubWork.findOne({ work_id: work._id });
+//             return { ...work.toObject(), subWork }; 
+//         }));
+
+//         return res.status(200).json({
+//             message: 'Work Retrieved Successfully',
+//             work: worksWithSubWork,
+//             code: 200
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+//     }
+// };
+
+// const Get_Workout = async (req, res) => {
+//     try {
+//         const works = await Work.find();
+
+//         const worksWithSubWork = await Promise.all(works.map(async (work) => {
+//             const subWork = await SubWork.findOne({ work_id: work._id });
+
+//             // Check if the user's _id is in the array of approved users
+//             const isUserApproved = subWork && subWork.user_id && subWork.user_id.includes(req.user._id);
+
+//             return {
+//                 ...work.toObject(),
+//                 subWork: {
+//                     ...subWork.toObject(),
+//                     isUserApproved: isUserApproved
+//                 }
+//             };
+//         }));
+
+//         return res.status(200).json({
+//             message: 'Work Retrieved Successfully',
+//             work: worksWithSubWork,
+//             code: 200
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+//     }
+// };
+
+
 const Get_Workout = async (req, res) => {
     try {
         const works = await Work.find();
-        return res.status(200).json({ message: 'Work Retrieved Successfully', work: works, code: 200 });
+
+        const worksWithSubWork = await Promise.all(works.map(async (work) => {
+            const subWork = await SubWork.findOne({ work_id: work._id });
+            const isUserApproved = subWork && subWork.user_id && subWork.user_id.includes(req.user._id);
+
+            if (subWork) {
+                subWork.approve = isUserApproved;
+                await subWork.save();
+            }
+
+            return {
+                ...work.toObject(),
+                subWork: {
+                    ...subWork.toObject(),
+                    isUserApproved: isUserApproved
+                }
+            };
+        }));
+
+        return res.status(200).json({
+            message: 'Work Retrieved Successfully',
+            work: worksWithSubWork,
+            code: 200
+        });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
@@ -95,18 +176,88 @@ const Get_Workout = async (req, res) => {
 
 const Single_Workout = async (req, res) => {
     try {
-        const Works = await Work.findById(req.params.id);
-        if (!Works || Works.length === 0) {
+        const workId = req.params.id;
+
+        // Fetch data from the Work table
+        const workData = await Work.findById(workId);
+        if (!workData) {
             return res.status(403).json({ message: 'Work not found.', status: 'failed' });
         }
+        const subWorkData = await SubWork.findOne({ work_id: workId });
 
-        res.status(200).json({ message: 'Work retrieved successfully', work: Works, code: 200, user: req.user });
+        res.status(200).json({
+            message: 'Work retrieved successfully',
+            work: workData,
+            subWork: subWorkData,
+            code: 200,
+            user: req.user
+        });
 
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
     }
 };
+
+
+// const Single_Workout = async (req, res) => {
+//     try {
+//         const workId = req.params.id;
+//         const workData = await Work.findById(workId);
+//         if (!workData) {
+//             return res.status(403).json({ message: 'Work not found.', status: 'failed' });
+//         }
+//         const subWorkData = await SubWork.findOne({ work_id: workId });
+
+//         // Check if the user's _id matches the user_id in SubWork
+//         const isUserApproved = subWorkData && subWorkData.user_id && subWorkData.user_id.equals(req.user._id);
+
+//         res.status(200).json({
+//             message: 'Work retrieved successfully',
+//             work: workData,
+//             subWork: subWorkData,
+//             isUserApproved: isUserApproved,
+//             code: 200,
+//             user: req.user
+//         });
+
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+//     }
+// };
+
+// const Single_Workout = async (req, res) => {
+//     try {
+//         const workId = req.params.id;
+
+//         // Fetch data from the Work table
+//         const workData = await Work.findById(workId);
+//         if (!workData) {
+//             return res.status(403).json({ message: 'Work not found.', status: 'failed' });
+//         }
+
+//         // Fetch data from the SubWork table based on work_id
+//         const subWorkData = await SubWork.findOne({ work_id: workId });
+
+//         // Check if the user's _id is in the array of approved users
+//         const isUserApproved = subWorkData && subWorkData.user_id && subWorkData.user_id.includes(req.user._id);
+
+//         res.status(200).json({
+//             message: 'Work retrieved successfully',
+//             work: workData,
+//             subWork: subWorkData,
+//             isUserApproved: isUserApproved,
+//             code: 200,
+//             user: req.user
+//         });
+
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+//     }
+// };
+
 
 /* Fetch_Single_Work Start Here*/
 
@@ -121,13 +272,13 @@ const Remove_Workout = async (req, res) => {
     try {
 
         const workid = await Work.findById(req.params.id);
-        console.log(workid)
+        // console.log(workid)
         if (!workid) {
             return res.status(200).json({ message: 'work Not Found', status: 'failed' });
         }
 
         await Work.deleteOne({ _id: req.params.id });
-        return res.status(200).json({ message: 'Item Successfully Deleted', code: 200 });
+        return res.status(200).json({ message: 'Member Successfully Deleted', code: 200 });
 
     } catch (error) {
         console.error(error);
@@ -220,5 +371,5 @@ const Update_Workout_Profile = async (req, res) => {
 
 module.exports = {
     Create_workout, Get_Workout, Single_Workout,
-    Remove_Workout, Update_Workout, Update_Workout_Profile
+    Remove_Workout, Update_Workout, Update_Workout_Profile,
 }

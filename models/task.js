@@ -2,6 +2,12 @@ const mongoose = require('mongoose')
 
 
 const taskSchema = new mongoose.Schema({
+    
+    subwork_id  : {
+        type: mongoose.Schema.Types.ObjectId,
+        default:null,
+        ref: 'SubWork'
+    },
 
     exercise: {
         type: String,

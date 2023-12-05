@@ -71,7 +71,7 @@ const Remove_Blog = async (req, res) => {
     try {
 
         const blogId = await Blog.findById(req.params.id);
-        console.log(blogId)
+        // console.log(blogId)
         if (!blogId) {
             return res.status(200).json({ message: 'Blog Not Found', status: 'failed' });
         }
