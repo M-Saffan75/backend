@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema({
     },
 
     profileImage: {
-        type: null,
         default:null,
     },
     read: {
