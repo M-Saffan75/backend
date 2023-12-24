@@ -94,7 +94,7 @@ const Remove_Blog = async (req, res) => {
 
 const Fetch_Blog = async (req, res) => {
     try {
-        const blogs = await Blog.find().populate('user_id');
+        const blogs = await Blog.find().populate('user_id')/* .sort({ timestampField: -1 }); */
         if (!blogs || blogs.length === 0) {
             return res.status(404).json({ message: 'blog not found.', status: 'failed' });
         }
