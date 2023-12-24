@@ -21,6 +21,7 @@ const userSchema = new mongoose.Schema({
     },
 
     profileImage: {
+        type: mongoose.Schema.Types.Mixed,
         default:null,
     },
     read: {
