@@ -207,14 +207,14 @@ const Update_Blog = async (req, res) => {
 
 /* <><><><><>----------------------<><><><><> */
 
-
 const Find_Blog_Team = async (req, res) => {
     try {
         const result = await Blog.find({
             "$or": [
                 { title: { $regex: req.params.key, $options: "i" } },
             ],
-        });
+        }).populate('user_id'); // Add populate to fetch related user data
+
         res.status(200).json({ data: result, message: 'Search successful', status: 'success' });
     } catch (error) {
         res.status(500).json({ message: 'Search failed', error, status: 'failed' });
