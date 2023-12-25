@@ -101,6 +101,21 @@ const fetch_challenge = async (req, res) => {
 /* <><><><><>----------------------<><><><><> */
 
 
+const Single_Challenge = async (req, res) => {
+    try {
+        const challenges = await Challenge.findById(req.params.id).populate('user_id');
+        if (!challenges|| challenges.length === 0) {
+            return res.status(404).json({ message: 'Blog not found.', status: 'failed' });
+        }
+
+        res.status(200).json({ message: 'Challenge retrieved successfully', challenges: challenges, code: 200, });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error', error: error.message, status: 'failed' });
+    }
+}
+
 /* get_User_Post_Count Api Start Here*/
 
 
@@ -167,4 +182,4 @@ const JoinChallenge = async (req, res) => {
 /* get_User_Post_Count Api Start Here*/
 
 
-module.exports = { create_Join_post, fetch_challenge, JoinChallenge }
+module.exports = { create_Join_post, fetch_challenge, JoinChallenge,Single_Challenge }
