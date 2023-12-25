@@ -88,7 +88,7 @@ const Create_User_Body = async (req, res) => {
 
 const Get_User_Body = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user?.id;
         const bodyData = await Body.findOne({ user_id: userId });
 
         if (!bodyData) {

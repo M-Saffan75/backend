@@ -2,7 +2,7 @@ const express = require('express');
 const Router = express;
 const { Valid_User } = require('../../middleware/auth_middleware');
 const { Create_workout, Update_Workout_Profile, Update_Workout,
-    Get_Workout, Single_Workout, Remove_Workout,
+    Get_Workout, Single_Workout, Remove_Workout,Find_Workout,
 } = require('../../controllers/admin/workout_controller');
 
 const work_Router = Router()
@@ -22,6 +22,7 @@ work_Router.use('/single/workout/:id', Valid_User);
 
 work_Router.post('/create/workout', Create_workout);
 work_Router.get('/fetch/workout', Get_Workout);
+work_Router.post('/find/workout/:key', Find_Workout);
 work_Router.get('/single/workout/:id', Single_Workout);
 work_Router.post('/remove/workout/:id', Remove_Workout);
 work_Router.post('/update/workout/:id', Update_Workout);

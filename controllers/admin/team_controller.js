@@ -197,4 +197,30 @@ const Fetch_Single_Team = async (req, res) => {
     }
 };
 
-module.exports = { Create_Team, Update_Team, Update_Member_Profile, Fetch_Team, Remove_Team, Fetch_Single_Team }
+
+
+/* <><><><><>----------------------<><><><><> */
+
+
+const Find_Team = async (req, res) => {
+    try {
+        const result = await Team.find({
+            "$or": [
+                { name: { $regex: req.params.key, $options: "i" } },
+                { title: { $regex: req.params.key, $options: "i" } },
+            ],
+        });
+        res.status(200).json({ data: result, message: 'Search successful', status: 'success' });
+    } catch (error) {
+        res.status(500).json({ message: 'Search failed', error, status: 'failed' });
+    }
+};
+
+
+/* <><><><><>----------------------<><><><><> */
+
+
+module.exports = {
+    Create_Team, Update_Team, Update_Member_Profile,
+    Fetch_Team, Remove_Team, Fetch_Single_Team, Find_Team
+}

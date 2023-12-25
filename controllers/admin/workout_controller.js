@@ -197,6 +197,7 @@ const Create_workout = async (req, res) => {
 //         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
 //     }
 // };
+
 const Get_Workout = async (req, res) => {
     try {
         const works = await Work.find();
@@ -439,12 +440,31 @@ const Update_Workout_Profile = async (req, res) => {
 };
 
 
-/* update Workout Image Api End Here */
+/* <><><><><>----------------------<><><><><> */
+
+
+/* update Workout Image Api start Here */
+
+
+const Find_Workout = async (req, res) => {
+    try {
+        const result = await Work.find({
+            "$or": [
+                { name: { $regex: req.params.key, $options: "i" } },
+                { title: { $regex: req.params.key, $options: "i" } },
+            ],
+        });
+        res.status(200).json({ data: result, message: 'Search successful' });
+    } catch (error) {
+        res.status(500).json({ message: 'Search failed', error });
+    }
+};
 
 
 /* <><><><><>----------------------<><><><><> */
 
+
 module.exports = {
-    Create_workout, Get_Workout, Single_Workout,
+    Create_workout, Get_Workout, Single_Workout, Find_Workout,
     Remove_Workout, Update_Workout, Update_Workout_Profile,
 }
