@@ -89,7 +89,7 @@ const fetch_challenge = async (req, res) => {
 
         res.status(200).json({ message: 'Challenges retrieved successfully', challenges: challenges });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error', error: error.message });
     }
 };
