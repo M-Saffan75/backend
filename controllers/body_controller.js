@@ -40,15 +40,12 @@ const Create_User_Body = async (req, res) => {
     }
 };
 
+
 const Update_Body = async (req, res) => {
     try {
         const { weight, heartrate, waterIntake } = req.body;
-
-        // if (!weight || !waterIntake || !heartrate) {
-        //     return res.status(400).json({ message: 'All Fields Are Required', status: 'failed' });
-        // }
-
         const userId = req.user._id;
+
         const existingBody = await Body.findOne({ user_id: userId });
 
         if (!existingBody) {
@@ -67,7 +64,6 @@ const Update_Body = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
     }
 };
-
 
 
 /* create Create_User_Body Api Start Here*/
