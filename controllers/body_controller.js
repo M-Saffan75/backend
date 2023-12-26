@@ -40,38 +40,33 @@ const Create_User_Body = async (req, res) => {
     }
 };
 
+const Update_Body = async (req, res) => {
+    try {
+        const { weight, heartrate, waterIntake } = req.body;
 
-// const Create_User_Body = async (req, res) => {
-//     try {
-//         const { age, weight, height, steps, gender, waterIntake } = req.body;
+        if (!weight || !waterIntake || !heartrate) {
+            return res.status(400).json({ message: 'All Fields Are Required', status: 'failed' });
+        }
 
-//         if (!age || !weight || !height || !steps || !gender || !waterIntake) {
-//             return res.status(400).json({ message: 'All Fields Are Required' });
-//         }
+        const userId = req.user._id;
+        const existingBody = await Body.findOne({ user_id: userId });
 
-//         const userId = req.user._id;
-//         const calories = calculateCaloriesBasedOnWeightAndAge(weight, age);
-//         const heartrate = calculateHeartRateBasedOnAge(age);
+        if (!existingBody) {
+            return res.status(404).json({ message: 'User body information not found', status: 'failed' });
+        }
 
-//         const body = new Body({
-//             user_id: userId,
-//             age,
-//             weight,
-//             height,
-//             steps,
-//             gender,
-//             calories,
-//             heartrate,
-//             waterIntake,
-//         });
+        existingBody.weight = weight;
+        existingBody.heartrate = heartrate;
+        existingBody.waterIntake = waterIntake;
 
-//         await body.save();
-//         res.status(201).json({ message: 'Body Created successfully', code: 201, data: body, user: req.user });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: 'Internal Server Error' });
-//     }
-// };
+        await existingBody.save();
+
+        res.status(200).json({ message: 'Body Updated successfully', code: 200, body: existingBody, status: 'success' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+    }
+};
 
 
 
@@ -111,4 +106,4 @@ const Get_User_Body = async (req, res) => {
 
 
 
-module.exports = { Create_User_Body, Get_User_Body }
+module.exports = { Create_User_Body, Get_User_Body, Update_Body }
