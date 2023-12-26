@@ -44,9 +44,9 @@ const Update_Body = async (req, res) => {
     try {
         const { weight, heartrate, waterIntake } = req.body;
 
-        if (!weight || !waterIntake || !heartrate) {
-            return res.status(400).json({ message: 'All Fields Are Required', status: 'failed' });
-        }
+        // if (!weight || !waterIntake || !heartrate) {
+        //     return res.status(400).json({ message: 'All Fields Are Required', status: 'failed' });
+        // }
 
         const userId = req.user._id;
         const existingBody = await Body.findOne({ user_id: userId });
