@@ -40,27 +40,32 @@ const Create_User_Body = async (req, res) => {
     }
 };
 
-
 const Update_Body = async (req, res) => {
     try {
         const { weight, heartrate, waterIntake } = req.body;
         const userId = req.user._id;
-
         const existingBody = await Body.findOne({ user_id: userId });
 
         if (!existingBody) {
             return res.status(404).json({ message: 'User body information not found', status: 'failed' });
         }
+        if (weight !== undefined) {
+            existingBody.weight = weight;
+        }
 
-        existingBody.weight = weight;
-        existingBody.heartrate = heartrate;
-        existingBody.waterIntake = waterIntake;
+        if (heartrate !== undefined) {
+            existingBody.heartrate = heartrate;
+        }
+
+        if (waterIntake !== undefined) {
+            existingBody.waterIntake = waterIntake;
+        }
 
         await existingBody.save();
 
         res.status(200).json({ message: 'Body Updated successfully', code: 200, body: existingBody, status: 'success' });
     } catch (error) {
-        console.error(error);
+        console.log(error);
         res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
     }
 };

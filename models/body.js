@@ -33,11 +33,9 @@ const bodySchema = new mongoose.Schema({
     },
     weight: {
         type: String,
-        required: [true, 'Please add the weight']
     },
     waterIntake: {
         type: String,
-        required: [true, 'Please add the waterIntakes']
     },
 
 }, {
