@@ -39,7 +39,6 @@ const Create_User_Body = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
     }
 };
-
 const Update_Body = async (req, res) => {
     try {
         const { weight, heartrate, waterIntake } = req.body;
@@ -49,15 +48,16 @@ const Update_Body = async (req, res) => {
         if (!existingBody) {
             return res.status(404).json({ message: 'User body information not found', status: 'failed' });
         }
-        if (weight !== undefined || weight !== "") {
+
+        if (weight !== undefined && weight !== "") {
             existingBody.weight = weight;
         }
 
-        if (heartrate !== undefined || heartrate !== "") {
+        if (heartrate !== undefined && heartrate !== "") {
             existingBody.heartrate = heartrate;
         }
 
-        if (waterIntake !== undefined || waterIntake !== "") {
+        if (waterIntake !== undefined && waterIntake !== "") {
             existingBody.waterIntake = waterIntake;
         }
 
@@ -69,7 +69,6 @@ const Update_Body = async (req, res) => {
         res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
     }
 };
-
 
 /* create Create_User_Body Api Start Here*/
 
