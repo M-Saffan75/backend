@@ -2,8 +2,20 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user.js');
 const multer = require('multer');
+const nodemailer = require('nodemailer');
+const dotenv = require('dotenv');
+dotenv.config();
 
 
+let transporter = nodemailer.createTransport({
+    host: process.env.EMAIL_HOST,
+    port: process.env.EMAIL_PORT,
+    secure: false,
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+    }
+});
 
 /* Profile Image Here Start */
 
@@ -30,6 +42,49 @@ const upload = multer({ storage: storage });
 /* http://localhost:5000/api/user/register */
 
 
+// const Register_Here = async (req, res) => {
+
+//     const emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
+
+//     try {
+//         const { name, email, password, roletype } = req.body;
+//         const errors = emailRegex.test(email);
+
+//         if (!errors) {
+//             return res.status(403).json({ message: 'Please provide a valid email address', status: 'failed', code: 403 });
+//         }
+
+//         if (!name || !email || !password || !roletype) {
+//             return res.status(400).json({ message: 'All Fields and Image Are Required', code: 400 });
+//         }
+
+//         const emailExist = await User.findOne({ email });
+
+//         if (emailExist) {
+//             return res.status(402).json({ message: 'Email Already Exists', status: 'failed', });
+//         }
+
+//         const hashedPassword = await bcrypt.hash(password, 10);
+//         const user = await User({
+//             name,
+//             email,
+//             roletype: "0",
+//             password: hashedPassword,
+//         });
+
+//         await user.save();
+//         const token = jwt.sign({ userID: user._id }, process.env.ACCESS_SECRET_KEY, { expiresIn: '5d' });
+//         res.status(200).json({ message: 'User registered successfully', user: user, token: token, code: 200, });
+
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ message: 'Internal Server Error' });
+//     }
+// };
+
+
+const generateOTP = () => Math.floor(10000 + Math.random() * 90000);
+
 const Register_Here = async (req, res) => {
 
     const emailRegex = /^[-!#$%&'*+\/0-9=?A-Z^_a-z{|}~](\.?[-!#$%&'*+\/0-9=?A-Z^_a-z`{|}~])*@[a-zA-Z0-9](-*\.?[a-zA-Z0-9])*\.[a-zA-Z](-?[a-zA-Z0-9])+$/;
@@ -49,26 +104,67 @@ const Register_Here = async (req, res) => {
         const emailExist = await User.findOne({ email });
 
         if (emailExist) {
-            return res.status(402).json({ message: 'Email Already Exists', status: 'failed', });
+            return res.status(402).json({ message: 'Email Already Exists', status: 'failed' });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
+        const otp = generateOTP();
+
         const user = await User({
             name,
             email,
             roletype: "0",
             password: hashedPassword,
+            otp,
         });
 
         await user.save();
+
+        let info = await transporter.sendMail({
+            from: process.env.EMAIL_FROM,
+            to: user.email,
+            subject: 'OTP for Registration',
+            html: `Your OTP for registration is: <strong>${otp}</strong>`,
+        });
+
         const token = jwt.sign({ userID: user._id }, process.env.ACCESS_SECRET_KEY, { expiresIn: '5d' });
-        res.status(200).json({ message: 'User registered successfully', user: user, token: token, code: 200, });
+
+        res.status(200).json({
+            message: 'User registered successfully. Email verification OTP sent.',
+            user: user,
+            token: token,
+            code: 200,
+            info: info,
+        });
 
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
+
+const Check_Otp = async (req, resp) => {
+
+    const { email, otp } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (user && otp) {
+            if (user.otp === otp) {
+                resp.status(200).send({ status: "success", message: "OTP verified successfully", code: 200 });
+            } else {
+                resp.status(401).send({ status: "failed", message: "Invalid OTP" });
+            }
+        } else {
+            resp.status(403).send({ status: "failed", message: "All Fields Are Required" });
+        }
+    } catch (error) {
+        console.log(error);
+        resp.status(500).send({ status: "failed", message: "Internal Server Error" });
+    }
+};
+
 
 /* Register Api Here End */
 
@@ -267,4 +363,8 @@ const All_User = async (req, res) => {
 
 /* <><><><><>----------------------<><><><><> */
 
-module.exports = { Register_Here, Login_Here, Current_User, Password_Change, Update_User_Profile, Update_Profile,All_User }
+
+module.exports = {
+    Register_Here, Login_Here, Current_User, Check_Otp,
+    Password_Change, Update_User_Profile, Update_Profile, All_User
+}
