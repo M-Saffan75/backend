@@ -49,15 +49,15 @@ const Update_Body = async (req, res) => {
         if (!existingBody) {
             return res.status(404).json({ message: 'User body information not found', status: 'failed' });
         }
-        if (weight !== undefined) {
+        if (weight !== undefined || weight !== "") {
             existingBody.weight = weight;
         }
 
-        if (heartrate !== undefined) {
+        if (heartrate !== undefined || heartrate !== "") {
             existingBody.heartrate = heartrate;
         }
 
-        if (waterIntake !== undefined) {
+        if (waterIntake !== undefined || waterIntake !== "") {
             existingBody.waterIntake = waterIntake;
         }
 
