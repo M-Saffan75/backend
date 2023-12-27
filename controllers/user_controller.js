@@ -152,7 +152,7 @@ const Check_Otp = async (req, resp) => {
 
         if (user && otp) {
             if (user.otp === otp) {
-                resp.status(200).send({ status: "success", message: "OTP verified successfully", code: 200 });
+                resp.status(200).send({ status: "success", message: "OTP verified successfully", code: 200, user: user, });
             } else {
                 resp.status(401).send({ status: "failed", message: "Invalid OTP" });
             }
