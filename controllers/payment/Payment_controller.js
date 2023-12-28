@@ -2,14 +2,15 @@ const stripe = require('stripe')('sk_test_51ORxMILO9XBdvOdqPYc34ob6wRVDnIodcueGb
 
 const Payment_User = async (req, res) => {
 
+    const { amount, currency } = req.body
     const customer = await stripe.customers.create();
     const ephemeralKey = await stripe.ephemeralKeys.create(
         { customer: customer.id },
         { apiVersion: '2023-10-16' }
     );
     const paymentIntent = await stripe.paymentIntents.create({
-        amount: 1099,
-        currency: 'eur',
+        amount: amount,
+        currency: currency,
         customer: customer.id,
         payment_method_types: ['card']
         // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
