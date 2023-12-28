@@ -3,8 +3,9 @@ const stripe = require('stripe')('sk_test_51ORxMILO9XBdvOdqPYc34ob6wRVDnIodcueGb
 const Payment_User = async (req, res) => {
 
     const { amount, currency } = req.body
+    
     if (!amount || !currency) {
-        res.json({ message: 'feilds are required', status: 'failed' })
+        return res.status(403).json({ message: 'fields are found.', status: 'failed', code: 404 });
     }
 
     const customer = await stripe.customers.create();
