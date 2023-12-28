@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema({
     otp: {
         type: String,
     },
+    payment: {
+        type: mongoose.Schema.Types.Mixed,
+        default:null
+    },
 }, {
     timestamps: true
 });
