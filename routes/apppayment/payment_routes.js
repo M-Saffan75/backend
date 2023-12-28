@@ -13,7 +13,7 @@ const payrouter = Router()
 
 /* user Public Routes start Here */
 
-payrouter.post('payment/sheet', Payment_User)
+payrouter.post('/payment/sheet', Payment_User)
 
 /* user Public Routes End Here */
 
