@@ -363,6 +363,17 @@ const All_User = async (req, res) => {
 
 /* <><><><><>----------------------<><><><><> */
 
+const updateExistingRecords = async () => {
+    try {
+        const result = await User.updateMany({}, { $set: { payment: null } });
+
+        console.log(`${result} records updated successfully.`);
+    } catch (error) {
+        console.error('Error updating records:', error);
+    }
+};
+
+updateExistingRecords()
 
 module.exports = {
     Register_Here, Login_Here, Current_User, Check_Otp,
