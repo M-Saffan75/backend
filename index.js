@@ -14,6 +14,7 @@ const subscription = require('./routes/admin/subscription_routes');
 const Create_Work = require('./routes/admin/workout_routes');
 const Create_SubWork = require('./routes/admin/subwork_routes');
 const freetask_Router = require('./routes/freetask_routes');
+const pay_Router = require('./routes/apppayment/payment_routes');
 
 
 const app = express();
@@ -47,6 +48,7 @@ app.use('/api/subscription', subscription)
 app.use('/api/work', Create_Work)
 app.use('/api/subwork', Create_SubWork)
 app.use('/api/freetask' , freetask_Router)
+app.use('api/stripe', pay_Router)
 
 app.listen(port, () => {
     console.log(`server listening at http://localhost:${port}`);
