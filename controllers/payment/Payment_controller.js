@@ -27,6 +27,8 @@ const Payment_User = async (req, res) => {
         paymentIntent: paymentIntent.client_secret,
         ephemeralKey: ephemeralKey.secret,
         customer: customer.id,
+        message: 'Payment Key has been added',
+        status:'success' 
     });
 };
 
