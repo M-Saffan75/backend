@@ -51,7 +51,7 @@ const Subscription_Approve = async (req, res) => {
         );
 
         if (!updatesubs) {
-            return res.status(404).json({ message: 'Feed not found.', status: 'failed', code: 404 });
+            return res.status(404).json({ message: 'User subscription not found.', status: 'failed', code: 404 });
         }
 
         res.status(200).json({ message: 'subscription approved successfully', subscription: updatesubs, code: 200 });
