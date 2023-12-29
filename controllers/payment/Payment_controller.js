@@ -39,7 +39,7 @@ const Subscription_Approve = async (req, res) => {
         const userId = req.user.id;
         const updatedFeed = await User.findByIdAndUpdate(
             userId,
-            { $set: { payment: true } },
+            { $set: { payment: 'tok_1OSIPCLO9XBdvOdqJCayKW9J' } },
             { new: true }
         );
 
