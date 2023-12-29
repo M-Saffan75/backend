@@ -6,7 +6,7 @@ const Payment_User = async (req, res) => {
     const { amount, currency } = req.body
 
     if (!amount || !currency) {
-        return res.status(403).json({ message: 'fields are found.', status: 'failed', code: 404 });
+        return res.status(403).json({ message: 'fields are found.', status: 'failed', code: 403 });
     }
 
     const customer = await stripe.customers.create();
@@ -36,10 +36,17 @@ const Payment_User = async (req, res) => {
 
 const Subscription_Approve = async (req, res) => {
     try {
+
+        const { payment } = req.body
         const userId = req.user.id;
+
+        if (!payment) {
+            return res.status(403).json({ message: 'fields are found.', status: 'failed', code: 403 });
+        }
+
         const updatedFeed = await User.findByIdAndUpdate(
             userId,
-            { $set: { payment: 'tok_1OSIPCLO9XBdvOdqJCayKW9J' } },
+            { $set: { payment: payment } },
             { new: true }
         );
 
