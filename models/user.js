@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema({
 
-    roletype : {
-        type :String,
-        require:true,
+    roletype: {
+        type: String,
+        require: true,
     },
-    
+
     name: {
         type: String,
         required: [true, 'Please add the user name']
@@ -22,19 +22,25 @@ const userSchema = new mongoose.Schema({
 
     profileImage: {
         type: mongoose.Schema.Types.Mixed,
-        default:null,
+        default: null,
     },
+
     read: {
         type: Boolean,
-        default:false,
+        default: false,
     },
     otp: {
         type: String,
     },
     payment: {
         type: mongoose.Schema.Types.Mixed,
-        default:null
+        default: null
     },
+    subscription: {
+        type: mongoose.Schema.Types.Mixed,
+        default: null
+    },
+
 }, {
     timestamps: true
 });

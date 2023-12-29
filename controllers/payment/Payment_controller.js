@@ -39,19 +39,19 @@ const Payment_User = async (req, res) => {
 const Subscription_Approve = async (req, res) => {
     try {
 
-        const { payment } = req.body
+        const { payment , subscription} = req.body
         const userId = req.user.id;
 
-        if (!payment) {
+        if (!payment || !subscription) {
             return res.status(403).json({ message: 'fields are required.', status: 'failed', code: 403 });
         }
 
         const updatesubs = await User.findByIdAndUpdate(
             userId,
-            { $set: { payment: payment } },
+            { $set: { payment: payment, subscription:subscription } },
             { new: true }
         );
-
+// subscription
         if (!updatesubs) {
             return res.status(404).json({ message: 'User subscription not found.', status: 'failed', code: 404 });
         }
