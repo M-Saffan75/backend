@@ -1,12 +1,14 @@
 const express = require('express');
 const Router = express;
-const { Payment_User } = require('../../controllers/payment/Payment_controller')
+const { Valid_User } = require('../../middleware/auth_middleware');
+const { Payment_User, Subscription_Approve } = require('../../controllers/payment/Payment_controller')
+
 
 const payrouter = Router()
 
 /* user Private Routes start Here */
 
-// router.use('/current/user', Valid_User);
+payrouter.use('/approved/payment', Valid_User);
 
 /* user Private Routes End Here */
 
@@ -14,6 +16,7 @@ const payrouter = Router()
 /* user Public Routes start Here */
 
 payrouter.post('/payment/sheet', Payment_User)
+payrouter.post('/approved/payment', Subscription_Approve)
 
 /* user Public Routes End Here */
 
