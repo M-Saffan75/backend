@@ -7,6 +7,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 
+
 let transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
     port: process.env.EMAIL_PORT,
@@ -362,6 +363,7 @@ const All_User = async (req, res) => {
 /* All User Api End Here */
 
 /* <><><><><>----------------------<><><><><> */
+
 
 // const updateExistingRecords = async () => {
 //     try {
