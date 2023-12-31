@@ -1,7 +1,7 @@
 const express = require('express');
 const Router = express;
 const { Valid_User } = require('../../middleware/auth_middleware');
-const { Payment_User, Subscription_Approve, Remove_Subscription, Decreament_Subscription  } = require('../../controllers/payment/Payment_controller')
+const { Payment_User, Subscription_Approve, Remove_Subscription, Decreament_Subscription } = require('../../controllers/payment/Payment_controller')
 
 
 const payrouter = Router()
@@ -24,7 +24,7 @@ payrouter.post('/remove/payment/subscription', Remove_Subscription)
 
 payrouter.post('/decrease/payment/subscription', async (req, res) => {
     const userId = req.user.id;
-    console.log('userId',userId)
+    console.log('userId', userId)
     if (!userId) {
         console.log('User ID not available. Function cannot be triggered.');
         return res.status(400).json({ message: 'User ID not available' });
@@ -32,7 +32,7 @@ payrouter.post('/decrease/payment/subscription', async (req, res) => {
     try {
         await Decreament_Subscription(userId);
         console.log('Decrement triggered successfully');
-        return res.status(200).json({ message: 'Decrement triggered successfully' });
+        return res.status(200).json({ message: 'Decrement triggered successfully', userId, code: 200 , status:'success'});
     } catch (error) {
         console.error('Error triggering decrement:', error);
         return res.status(500).json({ message: 'Error triggering decrement', error: error.message });

@@ -90,108 +90,45 @@ const Remove_Subscription = async (req, res) => {
     }
 };
 
-const Decreament_Subscription = async (req, res, userId) => {
+const Decreament_Subscription = async (userId, res) => {
     try {
         const user = await User.findById(userId);
-        console.log('userId<><><',userId)
+        console.log('check karo', userId);
+
         if (!user) {
             console.log('User not found');
+            if (res && !res.finished) {
+                res.status(404).json({ message: 'User not found' });
+            }
             return;
         }
 
         while (user.subscription > 0) {
             user.subscription -= 1;
             await user.save();
-            console.log('Subscription count decremented successfully');
+            console.log('Subscription count decremented successfully', user.subscription);
 
-            if (user.subscription === 0) {
-                console.log('Subscription count is now 0');
-                return;
+            if (res && !res.finished) {
+                res.write(`Subscription count decremented successfully. Current count: ${user.subscription}\n`);
             }
 
-            await new Promise(resolve => setTimeout(resolve, 10000)); 
+            if (user.subscription === 0) {
+                console.log('Subscription count is now 0', user.subscription);
+                if (res && !res.finished) {
+                    res.status(200).json({ message: 'Subscription count is now 0' });
+                }
+                break;
+            }
+
+            await new Promise(resolve => setTimeout(resolve, 10000));
         }
     } catch (error) {
         console.error('Error decrementing subscription count:', error);
+        if (res && !res.finished) {
+            res.status(500).json({ message: 'Error decrementing subscription count', error: error.message });
+        }
     }
-}
-
-
-// const decrementSubscriptionCount = async (req, res) => {
-//     try {
-//         const userId = req.user.id;
-//         const user = await User.findById(userId);
-
-//         if (!user) {
-//             console.error('User not found');
-//             return;
-//         }
-//         if (user.subscription > 0) {
-//             user.subscription -= 1;
-//             await user.save();
-//             console.log('Subscription count decremented successfully');
-//         } else {
-//             console.log('Subscription count is already 0');
-//             return
-//         }
-//     } catch (error) {
-//         console.error('Error decrementing subscription count:', error);
-//     }
-// };
-
-// const job = schedule.scheduleJob('*/5 * * * * *', async (req, res) => {
-//     await decrementSubscriptionCount(req, res);
-//     console.log('done');
-// });
-
-
-// const Decreament_Subscription = async (userId) => {
-//     try {
-//         const user = await User.findById(userId);
-
-//         if (!user) {
-//             console.log('User not found');
-//             return;
-//         }
-
-//         while (user.subscription > 0) {
-//             user.subscription -= 1;
-//             await user.save();
-//             console.log('Subscription count decremented successfully');
-
-//             if (user.subscription === 0) {
-//                 console.log('Subscription count is now 0');
-//                 return;
-//             }
-
-//             await new Promise(resolve => setTimeout(resolve, 10000)); // Wait for 10 seconds before decrementing again
-//         }
-//     } catch (error) {
-//         console.error('Error decrementing subscription count:', error);
-//     }
-// };
-
-// const triggerDecrement = async (userId) => {
-//     const user = await User.findById(userId);
-
-//     if (!user) {
-//         console.log('User not found');
-//         return;
-//     }
-
-//     await Decreament_Subscription(userId);
-// };
-
-// const userId = req.user.id;
-
-// if (userId) {
-//     triggerDecrement(userId);
-// } else {
-//     console.log('User ID not available. Function cannot be triggered.');
-// }
-
-// const userId = /* '655e360b55bba0d85b630f51' */req?.user?.id;
-// triggerDecrement(userId);
+};
 
 
 module.exports = { Payment_User, Subscription_Approve, Remove_Subscription, Decreament_Subscription }
