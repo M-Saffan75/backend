@@ -24,7 +24,7 @@ payrouter.post('/remove/payment/subscription', Remove_Subscription)
 
 payrouter.post('/decrease/payment/subscription', async (req, res) => {
     const userId = req.user.id;
-
+    console.log('userId',userId)
     if (!userId) {
         console.log('User ID not available. Function cannot be triggered.');
         return res.status(400).json({ message: 'User ID not available' });

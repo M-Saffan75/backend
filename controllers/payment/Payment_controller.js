@@ -93,7 +93,7 @@ const Remove_Subscription = async (req, res) => {
 const Decreament_Subscription = async (req, res, userId) => {
     try {
         const user = await User.findById(userId);
-
+        console.log('userId<><><',userId)
         if (!user) {
             console.log('User not found');
             return;
