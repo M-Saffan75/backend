@@ -50,6 +50,10 @@ app.use('/api/subwork', Create_SubWork)
 app.use('/api/freetask' , freetask_Router)
 app.use('/api/stripe', pay_Router)
 
+app.use('/', async (req, res) => {
+    res.json({ message: 'API is running' });
+  });
+  
 app.listen(port, () => {
     console.log(`server listening at http://localhost:${port}`);
 })
