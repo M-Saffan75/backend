@@ -17,7 +17,7 @@ const Payment_User = async (req, res) => {
     );
     const paymentIntent = await stripe.paymentIntents.create({
         amount: amount,
-        currency: 'INR',
+        currency: 'usd',
         customer: customer.id,
         payment_method_types: ['card']
         // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
