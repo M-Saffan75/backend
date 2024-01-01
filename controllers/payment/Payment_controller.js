@@ -6,7 +6,7 @@ const Payment_User = async (req, res) => {
 
     const { amount, currency } = req.body
 
-    if (!amount || !currency) {
+    if (!amount) {
         return res.status(403).json({ message: 'fields are required.', status: 'failed', code: 403 });
     }
 
