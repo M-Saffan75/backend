@@ -120,7 +120,10 @@ const Decreament_Subscription = async (userId, res) => {
                 break;
             }
 
-            await new Promise(resolve => setTimeout(resolve, 10000));
+            // await new Promise(resolve => setTimeout(resolve, 10000));
+            const delayInMilliseconds = 24 * 60 * 60 * 1000;
+            await new Promise(resolve => setTimeout(resolve, delayInMilliseconds));
+
         }
     } catch (error) {
         console.error('Error decrementing subscription count:', error);

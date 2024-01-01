@@ -20,7 +20,6 @@ payrouter.use('/decrease/payment/subscription', Valid_User);
 payrouter.post('/payment/sheet', Payment_User)
 payrouter.post('/approved/payment', Subscription_Approve)
 payrouter.post('/remove/payment/subscription', Remove_Subscription)
-// payrouter.post('/decrease/payment/subscription', Decreament_Subscription )
 
 payrouter.post('/decrease/payment/subscription', async (req, res) => {
     const userId = req.user.id;
