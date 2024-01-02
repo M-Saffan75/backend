@@ -59,7 +59,7 @@ const SubWorkCreate = async (req, res) => {
             });
 
             await subwork.save();
-            res.status(200).json({ message: 'SubWork Video successfully', subworks: subwork, code: 200 });
+            res.status(200).json({ message: 'Main Workout successfully Added', subworks: subwork, code: 200 });
         });
     } catch (error) {
         console.error(error);
