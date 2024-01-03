@@ -133,7 +133,7 @@ const Get_Workout = async (req, res) => {
 
             if (subWork) {
                 // Fetch tasks related to the subWork
-                const tasks = await Task.find({ subWork_id: subWork._id });
+                const tasks = await Task.find({ subwork_id: subWork._id });
 
                 subWork.approve = isUserApproved;
                 await subWork.save();
