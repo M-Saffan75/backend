@@ -20,7 +20,7 @@ task_Router.use('/single/task', Valid_User);
 
 task_Router.post('/create/task/:id', Task_Create);
 task_Router.get('/fetch/task', Get_Task);
-task_Router.get('/single/task', Single_Task);
+task_Router.get('/single/task/:id', Single_Task);
 
 /* Task Public Routes End Here */
 
