@@ -101,7 +101,7 @@ const Get_Task = async (req, res) => {
 
 const Single_Task = async (req, res) => {
     try {
-        const taskId = req.params.taskId;
+        const taskId = req.params.id;
         const task = await Task.findById(taskId);
 
         if (!task) {
