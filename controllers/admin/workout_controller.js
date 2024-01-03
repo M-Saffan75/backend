@@ -242,23 +242,20 @@ const Get_Workout = async (req, res) => {
 //     }
 // };
 
+
 const Single_Workout = async (req, res) => {
     try {
         const workId = req.params.id;
-
-        // Fetch data from the Work table
         const workData = await Work.findById(workId);
         if (!workData) {
             return res.status(403).json({ message: 'Work not found.', status: 'failed' });
         }
 
-        // Fetch data from the SubWork table
         const subWorkData = await SubWork.findOne({ work_id: workId });
         if (!subWorkData) {
             return res.status(403).json({ message: 'SubWork not found.', status: 'failed' });
         }
 
-        // Fetch tasks related to the subWork
         const tasks = await Task.find({ subwork_id: subWorkData._id });
 
         res.status(200).json({

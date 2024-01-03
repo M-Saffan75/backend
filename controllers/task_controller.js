@@ -35,13 +35,13 @@ const Task_Create = async (req, res) => {
     try {
         upload.single('taskImage')(req, res, async function (err) {
             if (err) {
-                return res.status(400).json({ message: 'File upload failed.', error: err, status: 'failed',code: 400 });
+                return res.status(400).json({ message: 'File upload failed.', error: err, status: 'failed', code: 400 });
             }
 
             const { exercise, set, reps } = req.body;
 
             if (!exercise || !set || !reps || !req.file) {
-                return res.status(401).json({ message: 'All Fields Are Required', status: 'failed',code: 401 });
+                return res.status(401).json({ message: 'All Fields Are Required', status: 'failed', code: 401 });
             }
 
             const newTask = new Task({
@@ -58,7 +58,7 @@ const Task_Create = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Internal Server Error',status: 'failed' ,code: 500});
+        return res.status(500).json({ message: 'Internal Server Error', status: 'failed', code: 500 });
     }
 };
 
@@ -99,6 +99,21 @@ const Get_Task = async (req, res) => {
 
 
 
+const Single_Task = async (req, res) => {
+    try {
+        const taskId = req.params.taskId;
+        const task = await Task.findById(taskId);
+
+        if (!task) {
+            return res.status(404).json({ message: 'Task not found', status: 'failed', code: 404 });
+        }
+
+        return res.status(200).json({ message: 'Task retrieved successfully', task, code: 200 });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal Server Error', status: 'failed', code: 500 });
+    }
+};
 
 
-module.exports = { Task_Create, Get_Task}
+module.exports = { Task_Create, Get_Task, Single_Task }

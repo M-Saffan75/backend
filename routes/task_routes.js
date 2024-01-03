@@ -1,7 +1,7 @@
 const express = require('express');
 const Router = express;
 const { Valid_User } = require('../middleware/auth_middleware');
-const { Task_Create, Get_Task, } = require('../controllers/task_controller');
+const { Task_Create, Get_Task,Single_Task } = require('../controllers/task_controller');
 
 
 const task_Router = Router()
@@ -19,6 +19,7 @@ task_Router.use('/create/task', Valid_User);
 
 task_Router.post('/create/task/:id', Task_Create);
 task_Router.get('/fetch/task', Get_Task);
+task_Router.get('/single/task', Single_Task);
 
 /* Task Public Routes End Here */
 
