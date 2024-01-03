@@ -11,6 +11,7 @@ const task_Router = Router()
 
 task_Router.use('/fetch/task', Valid_User);
 task_Router.use('/create/task', Valid_User);
+task_Router.use('/single/task', Valid_User);
 
 /* Task Private Routes End Here */
 
