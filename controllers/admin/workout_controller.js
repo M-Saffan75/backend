@@ -1,6 +1,7 @@
 const multer = require('multer');
 const SubWork = require('../../models/admin/subwork.js');
 const Work = require('../../models/admin/workout.js');
+const Task = require('../../models/task.js');
 
 
 
@@ -117,7 +118,7 @@ const Create_workout = async (req, res) => {
 //     }
 // };
 
-/* const Get_Workout = async (req, res) => {
+const Get_Workout = async (req, res) => {
     try {
         const works = await Work.find();
 
@@ -162,45 +163,45 @@ const Create_workout = async (req, res) => {
         console.error(error.message);
         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
     }
-}; */
-
-const Get_Workout = async (req, res) => {
-    try {
-        const works = await Work.find();
-
-        const worksWithSubWork = await Promise.all(works.map(async (work) => {
-            const subWork = await SubWork.findOne({ work_id: work._id });
-
-            let isUserApproved = false;
-
-            if (req.user && subWork && subWork.user_id) {
-                isUserApproved = subWork.user_id.includes(req.user._id);
-            }
-
-            if (subWork) {
-                subWork.approve = isUserApproved;
-                await subWork.save();
-            }
-
-            return {
-                ...work.toObject(),
-                subWork: {
-                    ...subWork?.toObject(), // Use optional chaining to avoid errors if subWork is null or undefined
-                    isUserApproved: isUserApproved
-                }
-            };
-        }));
-
-        return res.status(200).json({
-            message: 'Work Retrieved Successfully',
-            work: worksWithSubWork,
-            code: 200
-        });
-    } catch (error) {
-        console.error(error.message);
-        return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
-    }
 };
+
+// const Get_Workout = async (req, res) => {
+//     try {
+//         const works = await Work.find();
+
+//         const worksWithSubWork = await Promise.all(works.map(async (work) => {
+//             const subWork = await SubWork.findOne({ work_id: work._id });
+
+//             let isUserApproved = false;
+
+//             if (req.user && subWork && subWork.user_id) {
+//                 isUserApproved = subWork.user_id.includes(req.user._id);
+//             }
+
+//             if (subWork) {
+//                 subWork.approve = isUserApproved;
+//                 await subWork.save();
+//             }
+
+//             return {
+//                 ...work.toObject(),
+//                 subWork: {
+//                     ...subWork?.toObject(), // Use optional chaining to avoid errors if subWork is null or undefined
+//                     isUserApproved: isUserApproved
+//                 }
+//             };
+//         }));
+
+//         return res.status(200).json({
+//             message: 'Work Retrieved Successfully',
+//             work: worksWithSubWork,
+//             code: 200
+//         });
+//     } catch (error) {
+//         console.error(error.message);
+//         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+//     }
+// };
 
 
 /* Create Workout Api End Here*/
