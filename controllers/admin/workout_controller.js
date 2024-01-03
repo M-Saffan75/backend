@@ -217,59 +217,6 @@ const Get_Workout = async (req, res) => {
 
 /* Fetch_Single_Work Start Here*/
 
-const Single_Workout = async (req, res) => {
-    try {
-        const workId = req.params.id;
-
-        // Fetch data from the Work table
-        const workData = await Work.findById(workId);
-        if (!workData) {
-            return res.status(403).json({ message: 'Work not found.', status: 'failed' });
-        }
-        const subWorkData = await SubWork.findOne({ work_id: workId });
-
-        res.status(200).json({
-            message: 'Work retrieved successfully',
-            work: workData,
-            subWork: subWorkData,
-            code: 200,
-            user: req.user
-        });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
-    }
-};
-
-
-// const Single_Workout = async (req, res) => {
-//     try {
-//         const workId = req.params.id;
-//         const workData = await Work.findById(workId);
-//         if (!workData) {
-//             return res.status(403).json({ message: 'Work not found.', status: 'failed' });
-//         }
-//         const subWorkData = await SubWork.findOne({ work_id: workId });
-
-//         // Check if the user's _id matches the user_id in SubWork
-//         const isUserApproved = subWorkData && subWorkData.user_id && subWorkData.user_id.equals(req.user._id);
-
-//         res.status(200).json({
-//             message: 'Work retrieved successfully',
-//             work: workData,
-//             subWork: subWorkData,
-//             isUserApproved: isUserApproved,
-//             code: 200,
-//             user: req.user
-//         });
-
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
-//     }
-// };
-
 // const Single_Workout = async (req, res) => {
 //     try {
 //         const workId = req.params.id;
@@ -279,18 +226,12 @@ const Single_Workout = async (req, res) => {
 //         if (!workData) {
 //             return res.status(403).json({ message: 'Work not found.', status: 'failed' });
 //         }
-
-//         // Fetch data from the SubWork table based on work_id
 //         const subWorkData = await SubWork.findOne({ work_id: workId });
-
-//         // Check if the user's _id is in the array of approved users
-//         const isUserApproved = subWorkData && subWorkData.user_id && subWorkData.user_id.includes(req.user._id);
 
 //         res.status(200).json({
 //             message: 'Work retrieved successfully',
 //             work: workData,
 //             subWork: subWorkData,
-//             isUserApproved: isUserApproved,
 //             code: 200,
 //             user: req.user
 //         });
@@ -300,6 +241,42 @@ const Single_Workout = async (req, res) => {
 //         res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
 //     }
 // };
+
+const Single_Workout = async (req, res) => {
+    try {
+        const workId = req.params.id;
+
+        // Fetch data from the Work table
+        const workData = await Work.findById(workId);
+        if (!workData) {
+            return res.status(403).json({ message: 'Work not found.', status: 'failed' });
+        }
+
+        // Fetch data from the SubWork table
+        const subWorkData = await SubWork.findOne({ work_id: workId });
+        if (!subWorkData) {
+            return res.status(403).json({ message: 'SubWork not found.', status: 'failed' });
+        }
+
+        // Fetch tasks related to the subWork
+        const tasks = await Task.find({ subwork_id: subWorkData._id });
+
+        res.status(200).json({
+            message: 'Work retrieved successfully',
+            work: workData,
+            subWork: {
+                ...subWorkData.toObject(),
+                tasks: tasks.map(task => task.toObject())
+            },
+            code: 200,
+            user: req.user
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+    }
+};
 
 
 /* Fetch_Single_Work Start Here*/
