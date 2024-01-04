@@ -306,7 +306,7 @@ const Single_Workout = async (req, res) => {
 const Remove_Workout = async (req, res) => {
     try {
         const workId = req.params.id;
-        const deletedWork = await Work.findByIdAndRemove(workId);
+        const deletedWork = await Work.findByIdAndDelete(workId);
         console.log(workId)
         if (!deletedWork) {
             return res.status(404).json({ message: 'Work not found.', status: 'failed' });
