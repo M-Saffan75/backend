@@ -311,7 +311,7 @@ const Remove_Workout = async (req, res) => {
         if (!deletedWork) {
             return res.status(404).json({ message: 'Work not found.', status: 'failed' });
         }
-        const deletedSubWork = await SubWork.findOneAndRemove({ work_id: workId });
+        const deletedSubWork = await SubWork.findOneAndDelete({ work_id: workId });
         if (!deletedSubWork) {
             return res.status(404).json({ message: 'SubWork not found.', status: 'failed' });
         }
