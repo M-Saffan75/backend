@@ -28,6 +28,7 @@ app.use('/task/uploads', express.static('task/uploads'));
 app.use('/feed/uploads', express.static('feed/uploads')); 
 app.use('/challenges/uploads', express.static('challenges/uploads'));
 app.use('/Admin/teams/uploads', express.static('Admin/teams/uploads'));
+app.use('/Admin/subworkout/uploads', express.static('Admin/subworkout/uploads'));
 app.use('/Admin/blogs/uploads', express.static('Admin/blogs/uploads'));
 app.use('/Admin/workout/uploads', express.static('Admin/workout/uploads'));
 app.use('/Admin/workout/videos', express.static('Admin/workout/videos'));
