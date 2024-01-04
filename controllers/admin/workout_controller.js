@@ -285,23 +285,51 @@ const Single_Workout = async (req, res) => {
 
 /* Create Remove BLog start Here*/
 
+// const Remove_Workout = async (req, res) => {
+//     try {
+
+//         const workid = await Work.findById(req.params.id);
+//         // console.log(workid)
+//         if (!workid) {
+//             return res.status(200).json({ message: 'work Not Found', status: 'failed' });
+//         }
+
+//         await Work.deleteOne({ _id: req.params.id });
+//         return res.status(200).json({ message: 'Member Successfully Deleted', code: 200 });
+
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ message: 'Internal Server Error', status: 'failed', error: error.message });
+//     }
+// };
+
 const Remove_Workout = async (req, res) => {
     try {
-
-        const workid = await Work.findById(req.params.id);
-        // console.log(workid)
-        if (!workid) {
-            return res.status(200).json({ message: 'work Not Found', status: 'failed' });
+        const workId = req.params.id;
+        const deletedWork = await Work.findByIdAndRemove(workId);
+        if (!deletedWork) {
+            return res.status(404).json({ message: 'Work not found.', status: 'failed' });
         }
+        const deletedSubWork = await SubWork.findOneAndRemove({ work_id: workId });
+        if (!deletedSubWork) {
+            return res.status(404).json({ message: 'SubWork not found.', status: 'failed' });
+        }
+        const deletedTasks = await Task.deleteMany({ subwork_id: deletedSubWork._id });
 
-        await Work.deleteOne({ _id: req.params.id });
-        return res.status(200).json({ message: 'Member Successfully Deleted', code: 200 });
+        res.status(200).json({
+            message: 'Workout removed successfully',
+            deletedWork: deletedWork,
+            deletedSubWork: deletedSubWork,
+            deletedTasks: deletedTasks,
+            code: 200
+        });
 
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Internal Server Error', status: 'failed', error: error.message });
+        res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
     }
 };
+
 
 
 /* Create Remove BLog End Here*/
