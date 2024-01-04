@@ -6,33 +6,48 @@ const SubWork = require('../../models/admin/subwork.js');
 
 /* Work Image Here End */
 
-const VideoStorage = multer.diskStorage({
+// const VideoStorage = multer.diskStorage({
+//     destination: function (req, file, cb) {
+//         cb(null, './Admin/workout/videos');
+//     },
+//     filename: function (req, file, cb) {
+//         cb(null, Date.now() + '-' + file.originalname);
+//     }
+// });
+
+// const challengeVideo = multer({
+//     storage: VideoStorage,
+//     fileFilter: function (req, file, cb) {
+//         if (file.mimetype.startsWith('video/')) {
+//             cb(null, true);
+//         } else {
+//             cb(new Error('Only video files are allowed!'), false);
+//         }
+//     }
+// });
+
+// subworkImage  
+
+const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, './Admin/workout/videos');
+        cb(null, './Admin/subworkout/uploads');
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);
     }
 });
 
-const challengeVideo = multer({
-    storage: VideoStorage,
-    fileFilter: function (req, file, cb) {
-        if (file.mimetype.startsWith('video/')) {
-            cb(null, true);
-        } else {
-            cb(new Error('Only video files are allowed!'), false);
-        }
-    }
-});
+const workoutImage = multer({ storage: storage });
+
 
 
 /* <><><><><>----------------------<><><><><> */
 
+// challengeVideo.single('workoutVideo')(req, res, async function (err) {
 
 const SubWorkCreate = async (req, res) => {
     try {
-        challengeVideo.single('workoutVideo')(req, res, async function (err) {
+        workoutImage.single('workoutVideo')(req, res, async function (err) {
 
             if (err) {
                 console.log(err)
@@ -42,7 +57,7 @@ const SubWorkCreate = async (req, res) => {
             const { title, work1, work2, work3, work4, work5, work6, benefit } = req.body;
 
             if (!req.file || !title || !work1 || !work2 || !work3 || !work4 || !work5 || !work6 || !benefit) {
-                return res.status(402).json({ message: 'All Fieldss and Video are Required', status: 'failed' });
+                return res.status(402).json({ message: 'All Fields and Image are Required', status: 'failed' });
             }
 
             const subwork = await SubWork({

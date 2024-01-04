@@ -18,6 +18,30 @@ const storage = multer.diskStorage({
 
 const workoutImage = multer({ storage: storage });
 
+//  video are here
+
+const VideoStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, './Admin/workout/videos');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+    }
+});
+
+
+const challengeVideo = multer({
+    storage: VideoStorage,
+    fileFilter: function (req, file, cb) {
+        if (file.mimetype.startsWith('video/')) {
+            cb(null, true);
+        } else {
+            cb(new Error('Only video files are allowed!'), false);
+        }
+    }
+});
+
+
 /* <><><><><>----------------------<><><><><> */
 
 
@@ -31,7 +55,7 @@ const workoutImage = multer({ storage: storage });
 const Create_workout = async (req, res) => {
 
     try {
-        workoutImage.single('workoutImage')(req, res, async function (err) {
+        challengeVideo.single('workoutImage')(req, res, async function (err) {
             if (err) {
                 return res.status(400).json({ message: 'File upload failed.', status: 'failed' });
             }
@@ -318,7 +342,7 @@ const Remove_Workout = async (req, res) => {
         const deletedTasks = await Task.deleteMany({ subwork_id: deletedSubWork._id  });
 
         res.status(200).json({
-            message: 'Workout removed successfully',
+            message: 'Workout Removed successfully',
             deletedWork: deletedWork,
             deletedSubWork: deletedSubWork,
             deletedTasks: deletedTasks,
