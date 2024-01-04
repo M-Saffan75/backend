@@ -307,6 +307,7 @@ const Remove_Workout = async (req, res) => {
     try {
         const workId = req.params.id;
         const deletedWork = await Work.findByIdAndRemove(workId);
+        console.log(workId)
         if (!deletedWork) {
             return res.status(404).json({ message: 'Work not found.', status: 'failed' });
         }
@@ -314,7 +315,7 @@ const Remove_Workout = async (req, res) => {
         if (!deletedSubWork) {
             return res.status(404).json({ message: 'SubWork not found.', status: 'failed' });
         }
-        const deletedTasks = await Task.deleteMany({ subwork_id: deletedSubWork._id });
+        const deletedTasks = await Task.deleteMany({ subwork_id: deletedSubWork.subwork_id  });
 
         res.status(200).json({
             message: 'Workout removed successfully',
