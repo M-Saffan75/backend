@@ -106,7 +106,7 @@ const Get_Task = async (req, res) => {
 const Single_Task = async (req, res) => {
     try {
         const taskId = req.params.id;
-        const task = await Task.findById(taskId).populate('user_id', 'name', 'email');
+        const task = await Task.findById(taskId).populate('user_id');
 
         if (!task) {
             return res.status(404).json({ message: 'Task not found', status: 'failed', code: 404 });
