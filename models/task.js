@@ -3,6 +3,11 @@ const mongoose = require('mongoose')
 
 const taskSchema = new mongoose.Schema({
     
+    user_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
+
     subwork_id  : {
         type: mongoose.Schema.Types.ObjectId,
         default:null,

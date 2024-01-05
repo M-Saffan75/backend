@@ -33,6 +33,7 @@ const upload = multer({ storage: storage });
 
 const Task_Create = async (req, res) => {
     try {
+        const userId = req?.user?.id
         upload.single('taskImage')(req, res, async function (err) {
             if (err) {
                 return res.status(400).json({ message: 'File upload failed.', error: err, status: 'failed', code: 400 });
@@ -50,6 +51,7 @@ const Task_Create = async (req, res) => {
                 reps: reps,
                 subwork_id: req.params.id,
                 taskImage: req.file.filename,
+                user_id: userId,
             });
 
             await newTask.save();
@@ -77,14 +79,16 @@ const Task_Create = async (req, res) => {
 const Get_Task = async (req, res) => {
     try {
         const userId = req.user?._id;
-        // console.log(userId)
+
+        // Find the SubWork associated with the current user
         const subwork = await SubWork.findOne({ user_id: userId });
 
         if (!subwork) {
             return res.status(404).json({ message: 'Subwork not found' });
         }
 
-        const tasks = await Task.find({ subwork_id: subwork._id });
+        // Fetch tasks and populate the 'user_id' field to include user information
+        const tasks = await Task.find({ subwork_id: subwork._id }).populate('user_id');
 
         return res.status(200).json({
             message: 'Subwork with Tasks Retrieved Successfully',
