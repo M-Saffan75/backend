@@ -88,7 +88,7 @@ const Get_Task = async (req, res) => {
         }
 
         // Fetch tasks and populate the 'user_id' field to include user information
-        const tasks = await Task.find({ subwork_id: subwork._id }).populate('user_id');
+        const tasks = await Task.find({ subwork_id: subwork._id }).populate('user_id', 'name', 'email');
 
         return res.status(200).json({
             message: 'Subwork with Tasks Retrieved Successfully',
@@ -106,7 +106,7 @@ const Get_Task = async (req, res) => {
 const Single_Task = async (req, res) => {
     try {
         const taskId = req.params.id;
-        const task = await Task.findById(taskId).populate('user_id');
+        const task = await Task.findById(taskId).populate('user_id', 'name', 'email');
 
         if (!task) {
             return res.status(404).json({ message: 'Task not found', status: 'failed', code: 404 });
@@ -118,6 +118,5 @@ const Single_Task = async (req, res) => {
         return res.status(500).json({ message: 'Internal Server Error', status: 'failed', code: 500 });
     }
 };
-
 
 module.exports = { Task_Create, Get_Task, Single_Task }
