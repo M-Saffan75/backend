@@ -98,103 +98,6 @@ const Create_workout = async (req, res) => {
 
 //         const worksWithSubWork = await Promise.all(works.map(async (work) => {
 //             const subWork = await SubWork.findOne({ work_id: work._id });
-//             return { ...work.toObject(), subWork }; 
-//         }));
-
-//         return res.status(200).json({
-//             message: 'Work Retrieved Successfully',
-//             work: worksWithSubWork,
-//             code: 200
-//         });
-//     } catch (error) {
-//         console.error(error);
-//         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
-//     }
-// };
-
-// const Get_Workout = async (req, res) => {
-//     try {
-//         const works = await Work.find();
-
-//         const worksWithSubWork = await Promise.all(works.map(async (work) => {
-//             const subWork = await SubWork.findOne({ work_id: work._id });
-
-//             // Check if the user's _id is in the array of approved users
-//             const isUserApproved = subWork && subWork.user_id && subWork.user_id.includes(req.user._id);
-
-//             return {
-//                 ...work.toObject(),
-//                 subWork: {
-//                     ...subWork.toObject(),
-//                     isUserApproved: isUserApproved
-//                 }
-//             };
-//         }));
-
-//         return res.status(200).json({
-//             message: 'Work Retrieved Successfully',
-//             work: worksWithSubWork,
-//             code: 200
-//         });
-//     } catch (error) {
-//         console.error(error);
-//         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
-//     }
-// };
-
-const Get_Workout = async (req, res) => {
-    try {
-        const works = await Work.find();
-
-        const worksWithSubWork = await Promise.all(works.map(async (work) => {
-            const subWork = await SubWork.findOne({ work_id: work._id });
-
-            let isUserApproved = false;
-
-            if (req.user && subWork && subWork.user_id) {
-                isUserApproved = subWork.user_id.includes(req.user._id);
-            }
-
-            if (subWork) {
-                // Fetch tasks related to the subWork
-                const tasks = await Task.find({ subwork_id: subWork._id }).populate('user_id');;
-
-                subWork.approve = isUserApproved;
-                await subWork.save();
-
-                return {
-                    ...work.toObject(),
-                    subWork: {
-                        ...subWork?.toObject(), // Use optional chaining to avoid errors if subWork is null or undefined
-                        isUserApproved: isUserApproved,
-                        tasks: tasks.map(task => task.toObject())
-                    }
-                };
-            }
-
-            return {
-                ...work.toObject(),
-                subWork: null
-            };
-        }));
-
-        return res.status(200).json({
-            message: 'Work Retrieved Successfully',
-            work: worksWithSubWork,
-            code: 200
-        });
-    } catch (error) {
-        console.error(error.message);
-        return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
-    }
-};
-
-// const Get_Workout = async (req, res) => {
-//     try {
-//         const works = await Work.find();
-
-//         const worksWithSubWork = await Promise.all(works.map(async (work) => {
-//             const subWork = await SubWork.findOne({ work_id: work._id });
 
 //             let isUserApproved = false;
 
@@ -203,16 +106,25 @@ const Get_Workout = async (req, res) => {
 //             }
 
 //             if (subWork) {
+//                 // Fetch tasks related to the subWork
+//                 const tasks = await Task.find({ subwork_id: subWork._id }).populate('user_id');;
+
 //                 subWork.approve = isUserApproved;
 //                 await subWork.save();
+
+//                 return {
+//                     ...work.toObject(),
+//                     subWork: {
+//                         ...subWork?.toObject(),
+//                         isUserApproved: isUserApproved,
+//                         tasks: tasks.map(task => task.toObject())
+//                     }
+//                 };
 //             }
 
 //             return {
 //                 ...work.toObject(),
-//                 subWork: {
-//                     ...subWork?.toObject(), // Use optional chaining to avoid errors if subWork is null or undefined
-//                     isUserApproved: isUserApproved
-//                 }
+//                 subWork: null
 //             };
 //         }));
 
@@ -226,6 +138,55 @@ const Get_Workout = async (req, res) => {
 //         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
 //     }
 // };
+
+const Get_Workout = async (req, res) => {
+    try {
+        const works = await Work.find();
+
+        const worksWithSubWork = [];
+
+        for (const work of works) {
+            const subWork = await SubWork.findOne({ work_id: work._id });
+
+            let isUserApproved = false;
+
+            if (req.user && subWork && subWork.user_id) {
+                isUserApproved = subWork.user_id.includes(req.user._id);
+            }
+
+            let subWorkData = null;
+
+            if (subWork) {
+                const tasks = await Task.find({ subwork_id: subWork._id }).populate('user_id');
+
+                subWork.approve = isUserApproved;
+                await subWork.save();
+
+                subWorkData = {
+                    ...subWork.toObject(),
+                    isUserApproved: isUserApproved,
+                    tasks: tasks.map(task => task.toObject())
+                };
+            }
+
+            const workData = {
+                ...work.toObject(),
+                subWork: subWorkData
+            };
+
+            worksWithSubWork.push(workData);
+        }
+
+        return res.status(200).json({
+            message: 'Work Retrieved Successfully',
+            work: worksWithSubWork,
+            code: 200
+        });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+    }
+};
 
 
 /* Create Workout Api End Here*/
@@ -339,7 +300,7 @@ const Remove_Workout = async (req, res) => {
         if (!deletedSubWork) {
             return res.status(404).json({ message: 'SubWork not found.', status: 'failed' });
         }
-        const deletedTasks = await Task.deleteMany({ subwork_id: deletedSubWork._id  });
+        const deletedTasks = await Task.deleteMany({ subwork_id: deletedSubWork._id });
 
         res.status(200).json({
             message: 'Workout Removed successfully',
