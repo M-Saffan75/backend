@@ -33,7 +33,7 @@ const upload = multer({ storage: storage });
 
 const Task_Create = async (req, res) => {
     try {
-        const userId = req?.user?.id
+        const userId = req?.user?._id
         upload.single('taskImage')(req, res, async function (err) {
             if (err) {
                 return res.status(400).json({ message: 'File upload failed.', error: err, status: 'failed', code: 400 });
