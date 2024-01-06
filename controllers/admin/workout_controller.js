@@ -145,32 +145,32 @@ const Get_Workout = async (req, res) => {
 
 const Get_Workout_One = async (req, res) => {
     try {
-        const works = await Work.find();
+        const subWorks = await SubWork.find().populate('user_id');
 
-        const worksWithTasks = [];
+        const subWorksWithTasks = [];
 
-        for (const work of works) {
-            const tasks = await Task.find({ subwork_id: work._id }).populate('user_id');
+        for (const subWork of subWorks) {
+            const tasks = await Task.find({ subwork_id: subWork._id }).populate('user_id');
 
             let isUserApproved = false;
 
             if (req.user) {
-                // Assuming user approval logic is based on some condition with work or tasks
+                // Assuming user approval logic is based on some condition with subWork or tasks
                 isUserApproved = tasks.some(task => task.user_id === req.user._id);
             }
 
-            const workData = {
-                ...work.toObject(),
+            const subWorkData = {
+                ...subWork.toObject(),
                 isUserApproved: isUserApproved,
                 tasks: tasks.map(task => task.toObject())
             };
 
-            worksWithTasks.push(workData);
+            subWorksWithTasks.push(subWorkData);
         }
 
         return res.status(200).json({
-            message: 'Work Retrieved Successfully',
-            work: worksWithTasks,
+            message: 'SubWork Retrieved Successfully',
+            subWork: subWorksWithTasks,
             code: 200
         });
     } catch (error) {
@@ -178,6 +178,7 @@ const Get_Workout_One = async (req, res) => {
         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
     }
 };
+
 
 
 /* Create Workout Api End Here*/
