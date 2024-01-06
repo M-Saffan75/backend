@@ -78,7 +78,7 @@ const Task_Create = async (req, res) => {
 
 const Get_Task = async (req, res) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user._id;
 
         // Find the SubWork associated with the current user
         const subwork = await SubWork.findOne({ user_id: userId });
