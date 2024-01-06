@@ -88,7 +88,7 @@ const Get_Task = async (req, res) => {
         }
 
         // Fetch tasks and populate the 'user_id' field to include user information
-        const tasks = await Task.find({ subwork_id: subwork._id }).populate('user_id', 'name', 'email');
+        const tasks = await Task.find({ subwork_id: subwork._id }).populate('user_id');
 
         return res.status(200).json({
             message: 'Subwork with Tasks Retrieved Successfully',
