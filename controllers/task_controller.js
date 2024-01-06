@@ -112,7 +112,7 @@ const Single_Task = async (req, res) => {
             return res.status(404).json({ message: 'Task not found', status: 'failed', code: 404 });
         }
 
-        return res.status(200).json({ message: 'Task retrieved successfully', task, code: 200 });
+        return res.status(200).json({ message: 'Task retrieved successfully', task:task, code: 200 });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Internal Server Error', status: 'failed', code: 500 });
