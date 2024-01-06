@@ -78,18 +78,14 @@ const Task_Create = async (req, res) => {
 
 const Get_Task = async (req, res) => {
     try {
-        const userId = req.user?._id;
-
-        // Find the SubWork associated with the current user
+        const userId = req.user.id;
         const subwork = await SubWork.findOne({ user_id: userId });
 
         if (!subwork) {
             return res.status(404).json({ message: 'Subwork not found' });
         }
 
-        // Fetch tasks and populate the 'user_id' field to include user information
         const tasks = await Task.find({ subwork_id: subwork._id }).populate('user_id');
-
         return res.status(200).json({
             message: 'Subwork with Tasks Retrieved Successfully',
             subwork: subwork,
