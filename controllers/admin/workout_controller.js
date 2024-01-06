@@ -92,60 +92,11 @@ const Create_workout = async (req, res) => {
 
 
 
-// const Get_Workout = async (req, res) => {
-//     try {
-//         const works = await Work.find();
-
-//         const worksWithSubWork = await Promise.all(works.map(async (work) => {
-//             const subWork = await SubWork.findOne({ work_id: work._id });
-
-//             let isUserApproved = false;
-
-//             if (req.user && subWork && subWork.user_id) {
-//                 isUserApproved = subWork.user_id.includes(req.user._id);
-//             }
-
-//             if (subWork) {
-//                 // Fetch tasks related to the subWork
-//                 const tasks = await Task.find({ subwork_id: subWork._id }).populate('user_id');;
-
-//                 subWork.approve = isUserApproved;
-//                 await subWork.save();
-
-//                 return {
-//                     ...work.toObject(),
-//                     subWork: {
-//                         ...subWork?.toObject(),
-//                         isUserApproved: isUserApproved,
-//                         tasks: tasks.map(task => task.toObject())
-//                     }
-//                 };
-//             }
-
-//             return {
-//                 ...work.toObject(),
-//                 subWork: null
-//             };
-//         }));
-
-//         return res.status(200).json({
-//             message: 'Work Retrieved Successfully',
-//             work: worksWithSubWork,
-//             code: 200
-//         });
-//     } catch (error) {
-//         console.error(error.message);
-//         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
-//     }
-// };
-
 const Get_Workout = async (req, res) => {
     try {
         const works = await Work.find();
 
-        const worksWithSubWork = [];
-
-        for (const work of works) {
+        const worksWithSubWork = await Promise.all(works.map(async (work) => {
             const subWork = await SubWork.findOne({ work_id: work._id });
 
             let isUserApproved = false;
@@ -154,32 +105,72 @@ const Get_Workout = async (req, res) => {
                 isUserApproved = subWork.user_id.includes(req.user._id);
             }
 
-            let subWorkData = null;
-
             if (subWork) {
-                const tasks = await Task.find({ subwork_id: subWork._id }).populate('user_id');
+                // Fetch tasks related to the subWork
+                const tasks = await Task.find({ subwork_id: subWork._id }).populate('user_id');;
 
                 subWork.approve = isUserApproved;
                 await subWork.save();
 
-                subWorkData = {
-                    ...subWork.toObject(),
-                    isUserApproved: isUserApproved,
-                    tasks: tasks.map(task => task.toObject())
+                return {
+                    ...work.toObject(),
+                    subWork: {
+                        ...subWork?.toObject(),
+                        isUserApproved: isUserApproved,
+                        tasks: tasks.map(task => task.toObject())
+                    }
                 };
             }
 
-            const workData = {
+            return {
                 ...work.toObject(),
-                subWork: subWorkData
+                subWork: null
             };
-
-            worksWithSubWork.push(workData);
-        }
+        }));
 
         return res.status(200).json({
             message: 'Work Retrieved Successfully',
             work: worksWithSubWork,
+            code: 200
+        });
+    } catch (error) {
+        console.error(error.message);
+        return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+    }
+};
+
+
+
+/*  */
+
+const Get_Workout_One = async (req, res) => {
+    try {
+        const works = await Work.find();
+
+        const worksWithTasks = [];
+
+        for (const work of works) {
+            const tasks = await Task.find({ subwork_id: work._id }).populate('user_id');
+
+            let isUserApproved = false;
+
+            if (req.user) {
+                // Assuming user approval logic is based on some condition with work or tasks
+                isUserApproved = tasks.some(task => task.user_id === req.user._id);
+            }
+
+            const workData = {
+                ...work.toObject(),
+                isUserApproved: isUserApproved,
+                tasks: tasks.map(task => task.toObject())
+            };
+
+            worksWithTasks.push(workData);
+        }
+
+        return res.status(200).json({
+            message: 'Work Retrieved Successfully',
+            work: worksWithTasks,
             code: 200
         });
     } catch (error) {
@@ -421,5 +412,5 @@ const Find_Workout = async (req, res) => {
 
 module.exports = {
     Create_workout, Get_Workout, Single_Workout, Find_Workout,
-    Remove_Workout, Update_Workout, Update_Workout_Profile,
+    Remove_Workout, Update_Workout, Update_Workout_Profile,Get_Workout_One
 }

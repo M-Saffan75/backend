@@ -2,7 +2,8 @@ const express = require('express');
 const Router = express;
 const { Valid_User } = require('../../middleware/auth_middleware');
 const { Create_workout, Update_Workout_Profile, Update_Workout,
-    Get_Workout, Single_Workout, Remove_Workout,Find_Workout,
+    Get_Workout_One, Get_Workout, Single_Workout,
+    Remove_Workout, Find_Workout,
 } = require('../../controllers/admin/workout_controller');
 
 const work_Router = Router()
@@ -14,6 +15,7 @@ work_Router.use('/fetch/workout', Valid_User);
 work_Router.use('/update/workout/:id', Valid_User);
 work_Router.use('/update/workout/Image/:id', Valid_User);
 work_Router.use('/single/workout/:id', Valid_User);
+work_Router.use('/get/workout/special', Valid_User);
 
 /* workout Private Routes End Here */
 
@@ -25,6 +27,7 @@ work_Router.get('/fetch/workout', Get_Workout);
 work_Router.post('/find/workout/:key', Find_Workout);
 work_Router.get('/single/workout/:id', Single_Workout);
 work_Router.post('/remove/workout/:id', Remove_Workout);
+work_Router.get('/get/workout/special', Get_Workout_One);
 work_Router.post('/update/workout/:id', Update_Workout);
 work_Router.post('/update/workout/Image/:id', Update_Workout_Profile);
 
