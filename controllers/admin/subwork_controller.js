@@ -152,4 +152,21 @@ const SubWorkout_Approve = async (req, res) => {
 
 
 
-module.exports = { SubWorkCreate, Single_SubWorkout, SubWorkout_Approve }
+const All_SubWorkout = async (req, res) => {
+    try {
+        const works = await SubWork.find()
+        if (!works || works.length === 0) {
+            return res.status(201).json({ message: 'SubWork Not Found', work: works, code: 201 });
+        }
+
+        return res.status(200).json({ message: 'SubWork Retrived Successfully', work: works, code: 200 });
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+    }
+};
+
+
+
+module.exports = { SubWorkCreate, Single_SubWorkout, SubWorkout_Approve, All_SubWorkout }

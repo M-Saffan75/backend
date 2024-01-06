@@ -143,13 +143,48 @@ const Get_Workout = async (req, res) => {
 
 /*  */
 
+// const Get_Workout_One = async (req, res) => {
+//     try {
+//         const subWorks = await SubWork.find().populate('user_id');
+
+//         const subWorksWithTasks = [];
+
+//         for (const subWork of subWorks) {
+//             const tasks = await Task.find({ subwork_id: subWork._id }).populate('user_id');
+
+//             let isUserApproved = false;
+
+//             if (req.user) {
+//                 // Assuming user approval logic is based on some condition with subWork or tasks
+//                 isUserApproved = tasks.some(task => task.user_id === req.user._id);
+//             }
+
+//             const subWorkData = {
+//                 ...subWork.toObject(),
+//                 isUserApproved: isUserApproved,
+//                 tasks: tasks.map(task => task.toObject())
+//             };
+
+//             subWorksWithTasks.push(subWorkData);
+//         }
+
+//         return res.status(200).json({
+//             message: 'SubWork Retrieved Successfully',
+//             subWork: subWorksWithTasks,
+//             code: 200
+//         });
+//     } catch (error) {
+//         console.error(error.message);
+//         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+//     }
+// };
+
+
 const Get_Workout_One = async (req, res) => {
     try {
         const subWorks = await SubWork.find().populate('user_id');
 
-        const subWorksWithTasks = [];
-
-        for (const subWork of subWorks) {
+        const subWorksWithTasks = subWorks.map(async (subWork) => {
             const tasks = await Task.find({ subwork_id: subWork._id }).populate('user_id');
 
             let isUserApproved = false;
@@ -159,18 +194,29 @@ const Get_Workout_One = async (req, res) => {
                 isUserApproved = tasks.some(task => task.user_id === req.user._id);
             }
 
-            const subWorkData = {
-                ...subWork.toObject(),
-                isUserApproved: isUserApproved,
-                tasks: tasks.map(task => task.toObject())
+            return {
+                subWork: {
+                    ...subWork.toObject(),
+                    isUserApproved: isUserApproved,
+                },
+                tasks: tasks.map(task => task.toObject()),
             };
+        });
 
-            subWorksWithTasks.push(subWorkData);
-        }
+        // Wait for all promises to resolve
+        const subWorksWithTasksData = await Promise.all(subWorksWithTasks);
+
+        // Create a custom response object
+        const customResponse = {
+            data: subWorksWithTasksData.map(item => ({
+                subWork: item.subWork,
+            })),
+            tasks: subWorksWithTasksData.flatMap(item => item.tasks),
+        };
 
         return res.status(200).json({
-            message: 'SubWork Retrieved Successfully',
-            subWork: subWorksWithTasks,
+            message: 'SubWork and Tasks Retrieved Successfully',
+            customResponse,
             code: 200
         });
     } catch (error) {
@@ -178,7 +224,6 @@ const Get_Workout_One = async (req, res) => {
         return res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
     }
 };
-
 
 
 /* Create Workout Api End Here*/
