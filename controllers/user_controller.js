@@ -393,6 +393,7 @@ const All_User = async (req, res) => {
 const Enrolled_User = async (req, res) => {
     try {
         const allUsers = await User.find();
+        console.log(allUsers)
         const subscribedUsers = allUsers.filter(user =>
             user.subscription !== null && user.subscription !== ''
         );
@@ -400,12 +401,12 @@ const Enrolled_User = async (req, res) => {
         const subscribedUsersCount = subscribedUsers.length;
         const subscribedUsersCountUser = subscribedUsers;
         const remainingUsersCount = allUsers.length - subscribedUsersCount;
-        const remainingUsersCountUser = allUsers - subscribedUsersCountUser;
+        // const remainingUsersCountUser = allUsers - subscribedUsersCountUser;
         const totalAmount = allUsers.reduce((sum, user) => sum + (parseInt(user.amount) || 0), 0);
 
         return res.status(200).json({
             users:subscribedUsersCountUser,
-            remainingUsersCountUser:remainingUsersCountUser,
+            remainingUsersCountUser:allUsers,
             subscribedUsersCount:subscribedUsersCount,
             remainingUsersCount:remainingUsersCount,
             totalAmount: totalAmount
