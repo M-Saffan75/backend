@@ -365,15 +365,13 @@ const All_User = async (req, res) => {
 
 /* <><><><><>----------------------<><><><><> */
 
-
 const Enrolled_User = async (req, res) => {
     try {
-
         const allUsers = await User.find();
-        const usersWithNonEmptySubscriptions = await User.find({ 'subscription': { $ne: null, $ne: undefined, $ne: '' } });
-        const usersWithNonEmptyOrNullSubscriptions = await User.find({ 'subscription': { $ne: undefined, $ne: '' } });
+        const usersWithNonEmptySubscriptions = await User.find({ 'subscription': { $ne: null, $nin: ['', undefined] } });
+        const usersWithNonEmptyOrNullSubscriptions = await User.find({ 'subscription': { $nin: ['', undefined] } });
         const usersWithNonNullOrUndefinedSubscriptions = await User.find({ 'subscription': { $exists: true, $ne: null } });
-        // const totalAmount = allUsers.reduce((sum, user) => sum + (user.amount || 0), 0);
+
         const totalAmount = allUsers.reduce((sum, user) => sum + (parseInt(user.amount) || 0), 0);
 
         return res.status(200).json({
@@ -384,13 +382,13 @@ const Enrolled_User = async (req, res) => {
             usersWithNonEmptyOrNullSubscriptions: usersWithNonEmptyOrNullSubscriptions,
             usersWithNonNullOrUndefinedSubscriptions: usersWithNonNullOrUndefinedSubscriptions,
             totalAmount: totalAmount
-
         });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Internal Server Error', status: 'failed', code: 500 });
     }
 };
+
 
 
 /* 
