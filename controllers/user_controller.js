@@ -368,19 +368,20 @@ const All_User = async (req, res) => {
 
 const Enrolled_User = async (req, res) => {
     try {
-        
+
         const allUsers = await User.find();
         const usersWithNonEmptySubscriptions = await User.find({ 'subscription': { $ne: null, $ne: undefined, $ne: '' } });
         const usersWithNonEmptyOrNullSubscriptions = await User.find({ 'subscription': { $ne: undefined, $ne: '' } });
         const usersWithNonNullOrUndefinedSubscriptions = await User.find({ 'subscription': { $exists: true, $ne: null } });
-        const totalAmount = allUsers.reduce((sum, user) => sum + (user.amount || 0), 0);
+        // const totalAmount = allUsers.reduce((sum, user) => sum + (user.amount || 0), 0);
+        const totalAmount = allUsers.reduce((sum, user) => sum + (parseInt(user.amount) || 0), 0);
 
         return res.status(200).json({
             message: 'Users retrieved successfully',
             usersWithNonEmptySubscriptions: usersWithNonEmptySubscriptions,
             usersWithNonEmptyOrNullSubscriptions: usersWithNonEmptyOrNullSubscriptions,
             usersWithNonNullOrUndefinedSubscriptions: usersWithNonNullOrUndefinedSubscriptions,
-            totalAmount:  Number(totalAmount)
+            totalAmount: totalAmount
 
         });
     } catch (error) {
