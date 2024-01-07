@@ -378,6 +378,8 @@ const Enrolled_User = async (req, res) => {
 
         return res.status(200).json({
             message: 'Users retrieved successfully',
+            usernonsubscription: usersWithNonEmptySubscriptions.length,
+            useremptysubscription: usersWithNonEmptyOrNullSubscriptions.length,
             usersWithNonEmptySubscriptions: usersWithNonEmptySubscriptions,
             usersWithNonEmptyOrNullSubscriptions: usersWithNonEmptyOrNullSubscriptions,
             usersWithNonNullOrUndefinedSubscriptions: usersWithNonNullOrUndefinedSubscriptions,
