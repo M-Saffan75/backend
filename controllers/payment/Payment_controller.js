@@ -1,4 +1,5 @@
 const stripe = require('stripe')('sk_test_51ORxMILO9XBdvOdqPYc34ob6wRVDnIodcueGbFVplKB2b5aiDQO02pxhDvJaNuDEX9UTROpXkTZlre97wzCqKISC00MmPpf5SB')
+// const stripe = require('stripe')('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')
 const User = require('../../models/user.js')
 const schedule = require('node-schedule');
 

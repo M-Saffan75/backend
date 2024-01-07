@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { Valid_User } = require('../middleware/auth_middleware');
-const { Register_Here, All_User, Login_Here, Current_User, Check_Otp,
+const { Register_Here, All_User, Login_Here, Current_User, Check_Otp,Enrolled_User,
     Password_Change, Update_User_Profile, Update_Profile } = require('../controllers/user_controller');
 
 
@@ -18,14 +18,16 @@ router.use('/all/users', Valid_User);
 
 /* user Public Routes start Here */
 
-router.post('/register', Register_Here);
 router.post('/login', Login_Here);
-router.post('/check/otp', Check_Otp);
 router.get('/all/users', All_User);
-router.post('/update/user', Update_User_Profile);
-router.post('/update/profile', Update_Profile);
+router.post('/check/otp', Check_Otp);
+router.post('/register', Register_Here);
 router.get('/current/user', Current_User);
+router.get('/enrolled/users', Enrolled_User);
+router.post('/update/profile', Update_Profile);
+router.post('/update/user', Update_User_Profile);
 router.post('/password/change', Password_Change);
+
 
 /* user Public Routes End Here */
 

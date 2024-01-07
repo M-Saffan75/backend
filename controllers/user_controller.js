@@ -362,7 +362,28 @@ const All_User = async (req, res) => {
 
 /* All User Api End Here */
 
+
 /* <><><><><>----------------------<><><><><> */
+
+const Enrolled_User = async (req, res) => {
+    try {
+      const usersWithNonEmptySubscriptions = await User.find({ 'subscription': { $ne: null, $ne: undefined, $ne: '' } });
+      const usersWithNonEmptyOrNullSubscriptions = await User.find({ 'subscription': { $ne: undefined, $ne: '' } });
+      const usersWithNonNullOrUndefinedSubscriptions = await User.find({ 'subscription': { $exists: true, $ne: null } });
+  
+      return res.status(200).json({
+        message: 'Users retrieved successfully',
+        usersWithNonEmptySubscriptions: usersWithNonEmptySubscriptions,
+        usersWithNonEmptyOrNullSubscriptions: usersWithNonEmptyOrNullSubscriptions,
+        usersWithNonNullOrUndefinedSubscriptions: usersWithNonNullOrUndefinedSubscriptions
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: 'Internal Server Error', status: 'failed', code: 500 });
+    }
+  };
+
+  
 
 
 // const updateExistingRecords = async () => {
@@ -378,6 +399,6 @@ const All_User = async (req, res) => {
 // updateExistingRecords()
 
 module.exports = {
-    Register_Here, Login_Here, Current_User, Check_Otp,
+    Register_Here, Login_Here, Current_User, Check_Otp,Enrolled_User,
     Password_Change, Update_User_Profile, Update_Profile, All_User
 }
