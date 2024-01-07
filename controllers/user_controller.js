@@ -380,7 +380,7 @@ const Enrolled_User = async (req, res) => {
             usersWithNonEmptySubscriptions: usersWithNonEmptySubscriptions,
             usersWithNonEmptyOrNullSubscriptions: usersWithNonEmptyOrNullSubscriptions,
             usersWithNonNullOrUndefinedSubscriptions: usersWithNonNullOrUndefinedSubscriptions,
-            totalAmount: totalAmount
+            totalAmount:  Number(totalAmount)
 
         });
     } catch (error) {
