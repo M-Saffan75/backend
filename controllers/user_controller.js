@@ -365,30 +365,56 @@ const All_User = async (req, res) => {
 
 /* <><><><><>----------------------<><><><><> */
 
+// const Enrolled_User = async (req, res) => {
+//     try {
+//         const allUsers = await User.find();
+//         const usersWithNonEmptySubscriptions = await User.find({ 'subscription': { $ne: null, $nin: ['', undefined] } });
+//         const usersWithNonEmptyOrNullSubscriptions = await User.find({ 'subscription': { $nin: ['', undefined] } });
+//         const usersWithNonNullOrUndefinedSubscriptions = await User.find({ 'subscription': { $exists: true, $ne: null } });
+
+//         const totalAmount = allUsers.reduce((sum, user) => sum + (parseInt(user.amount) || 0), 0);
+
+//         return res.status(200).json({
+//             message: 'Users retrieved successfully',
+//             usernonsubscription: usersWithNonEmptySubscriptions.length,
+//             useremptysubscription: usersWithNonEmptyOrNullSubscriptions.length,
+//             usersWithNonEmptySubscriptions: usersWithNonEmptySubscriptions,
+//             usersWithNonEmptyOrNullSubscriptions: usersWithNonEmptyOrNullSubscriptions,
+//             usersWithNonNullOrUndefinedSubscriptions: usersWithNonNullOrUndefinedSubscriptions,
+//             totalAmount: totalAmount
+//         });
+//     } catch (error) {
+//         console.error(error);
+//         return res.status(500).json({ message: 'Internal Server Error', status: 'failed', code: 500 });
+//     }
+// };
+
+
 const Enrolled_User = async (req, res) => {
     try {
         const allUsers = await User.find();
-        const usersWithNonEmptySubscriptions = await User.find({ 'subscription': { $ne: null, $nin: ['', undefined] } });
-        const usersWithNonEmptyOrNullSubscriptions = await User.find({ 'subscription': { $nin: ['', undefined] } });
-        const usersWithNonNullOrUndefinedSubscriptions = await User.find({ 'subscription': { $exists: true, $ne: null } });
+        const subscribedUsers = allUsers.filter(user =>
+            user.subscription !== null && user.subscription !== ''
+        );
 
+        const subscribedUsersCount = subscribedUsers.length;
+        const remainingUsersCount = allUsers.length - subscribedUsersCount;
         const totalAmount = allUsers.reduce((sum, user) => sum + (parseInt(user.amount) || 0), 0);
 
         return res.status(200).json({
-            message: 'Users retrieved successfully',
-            usernonsubscription: usersWithNonEmptySubscriptions.length,
-            useremptysubscription: usersWithNonEmptyOrNullSubscriptions.length,
-            usersWithNonEmptySubscriptions: usersWithNonEmptySubscriptions,
-            usersWithNonEmptyOrNullSubscriptions: usersWithNonEmptyOrNullSubscriptions,
-            usersWithNonNullOrUndefinedSubscriptions: usersWithNonNullOrUndefinedSubscriptions,
+            subscribedUsersCount:subscribedUsersCount,
+            remainingUsersCount:remainingUsersCount,
             totalAmount: totalAmount
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Internal Server Error', status: 'failed', code: 500 });
+        return res.status(500).json({
+            message: 'Internal Server Error',
+            status: 'failed',
+            code: 500,
+        });
     }
 };
-
 
 
 /* 
