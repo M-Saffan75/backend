@@ -6,7 +6,6 @@ const userSchema = new mongoose.Schema({
         type: String,
         require: true,
     },
-
     name: {
         type: String,
         required: [true, 'Please add the user name']
@@ -19,12 +18,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please add the user password']
     },
-
     profileImage: {
         type: mongoose.Schema.Types.Mixed,
         default: null,
     },
-
     read: {
         type: Boolean,
         default: false,
@@ -37,6 +34,10 @@ const userSchema = new mongoose.Schema({
         default: null
     },
     subscription: {
+        type: mongoose.Schema.Types.Mixed,
+        default: null
+    },
+    amount: {
         type: mongoose.Schema.Types.Mixed,
         default: null
     },
