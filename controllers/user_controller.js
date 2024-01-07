@@ -365,34 +365,61 @@ const All_User = async (req, res) => {
 
 /* <><><><><>----------------------<><><><><> */
 
+
 const Enrolled_User = async (req, res) => {
     try {
-      const usersWithNonEmptySubscriptions = await User.find({ 'subscription': { $ne: null, $ne: undefined, $ne: '' } });
-      const usersWithNonEmptyOrNullSubscriptions = await User.find({ 'subscription': { $ne: undefined, $ne: '' } });
-      const usersWithNonNullOrUndefinedSubscriptions = await User.find({ 'subscription': { $exists: true, $ne: null } });
-  
-      const allUsers = [...usersWithNonEmptySubscriptions, ...usersWithNonEmptyOrNullSubscriptions, ...usersWithNonNullOrUndefinedSubscriptions];
-  
-      const totalAmount = allUsers.reduce((sum, user) => sum + (user.amount || 0), 0);
-  
-      const response = {
-        message: 'Users retrieved successfully',
-        usersWithNonEmptySubscriptions: usersWithNonEmptySubscriptions.length,
-        usersWithNonEmptyOrNullSubscriptions: usersWithNonEmptyOrNullSubscriptions.length,
-        usersWithNonNullOrUndefinedSubscriptions: usersWithNonNullOrUndefinedSubscriptions.length,
-        totalCount: allUsers.length,
-        totalAmount: totalAmount
-      };
-  
-      return res.status(200).json(response);
-    } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: 'Internal Server Error', status: 'failed', code: 500 });
-    }
-  };
-  
+        
+        const allUsers = await User.find();
+        const usersWithNonEmptySubscriptions = await User.find({ 'subscription': { $ne: null, $ne: undefined, $ne: '' } });
+        const usersWithNonEmptyOrNullSubscriptions = await User.find({ 'subscription': { $ne: undefined, $ne: '' } });
+        const usersWithNonNullOrUndefinedSubscriptions = await User.find({ 'subscription': { $exists: true, $ne: null } });
+        const totalAmount = allUsers.reduce((sum, user) => sum + (user.amount || 0), 0);
 
-  
+        return res.status(200).json({
+            message: 'Users retrieved successfully',
+            usersWithNonEmptySubscriptions: usersWithNonEmptySubscriptions,
+            usersWithNonEmptyOrNullSubscriptions: usersWithNonEmptyOrNullSubscriptions,
+            usersWithNonNullOrUndefinedSubscriptions: usersWithNonNullOrUndefinedSubscriptions,
+            totalAmount: totalAmount
+
+        });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Internal Server Error', status: 'failed', code: 500 });
+    }
+};
+
+
+/* 
+
+const Enrolled_User = async (req, res) => {
+try {
+  const usersWithNonEmptySubscriptions = await User.find({ 'subscription': { $ne: null, $ne: undefined, $ne: '' } });
+  const usersWithNonEmptyOrNullSubscriptions = await User.find({ 'subscription': { $ne: undefined, $ne: '' } });
+  const usersWithNonNullOrUndefinedSubscriptions = await User.find({ 'subscription': { $exists: true, $ne: null } });
+
+  const allUsers = [...usersWithNonEmptySubscriptions, ...usersWithNonEmptyOrNullSubscriptions, ...usersWithNonNullOrUndefinedSubscriptions];
+
+  const totalAmount = allUsers.reduce((sum, user) => sum + (user.amount || 0), 0);
+
+  const response = {
+    message: 'Users retrieved successfully',
+    usersWithNonEmptySubscriptions: usersWithNonEmptySubscriptions.length,
+    usersWithNonEmptyOrNullSubscriptions: usersWithNonEmptyOrNullSubscriptions.length,
+    usersWithNonNullOrUndefinedSubscriptions: usersWithNonNullOrUndefinedSubscriptions.length,
+    totalCount: allUsers.length,
+    totalAmount: totalAmount
+  };
+
+  return res.status(200).json(response);
+} catch (error) {
+  console.error(error);
+  return res.status(500).json({ message: 'Internal Server Error', status: 'failed', code: 500 });
+}
+};
+
+ 
+*/
 
 
 // const updateExistingRecords = async () => {
@@ -408,6 +435,6 @@ const Enrolled_User = async (req, res) => {
 // updateExistingRecords()
 
 module.exports = {
-    Register_Here, Login_Here, Current_User, Check_Otp,Enrolled_User,
+    Register_Here, Login_Here, Current_User, Check_Otp, Enrolled_User,
     Password_Change, Update_User_Profile, Update_Profile, All_User
 }
