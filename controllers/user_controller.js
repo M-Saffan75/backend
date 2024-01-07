@@ -398,10 +398,12 @@ const Enrolled_User = async (req, res) => {
         );
 
         const subscribedUsersCount = subscribedUsers.length;
+        const subscribedUsersCountUser = subscribedUsers;
         const remainingUsersCount = allUsers.length - subscribedUsersCount;
         const totalAmount = allUsers.reduce((sum, user) => sum + (parseInt(user.amount) || 0), 0);
 
         return res.status(200).json({
+            users:subscribedUsersCountUser,
             subscribedUsersCount:subscribedUsersCount,
             remainingUsersCount:remainingUsersCount,
             totalAmount: totalAmount
