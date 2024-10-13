@@ -33,7 +33,7 @@ const Create_User_Body = async (req, res) => {
         });
 
         await body.save();
-        res.status(201).json({ message: 'Body Created successfully', code: 201, body: body,/*  user: req.user */ });
+        res.status(201).json({ message: "Body Created successfully", code: 201, body: body,/*  user: req.user */ });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
