@@ -16,7 +16,7 @@ const Create_User_Body = async (req, res) => {
         const { height, steps, gender, weight, heartrate, waterIntake, calories, bodytype } = req.body;
 
         if (!height || !steps || !gender || !weight || !waterIntake || !bodytype) {
-            return res.status(400).json({ message: 'All Fields Are Required', status: 'failed' });
+            return res.status(400).json({ message: 'All Fields Are Required', status: "failed" });
         }
         const maxHeartRate = 220 - 30;
         const userId = req.user._id;
