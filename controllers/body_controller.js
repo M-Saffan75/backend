@@ -46,7 +46,7 @@ const Update_Body = async (req, res) => {
         const existingBody = await Body.findOne({ user_id: userId });
 
         if (!existingBody) {
-            return res.status(404).json({ message: 'User body information not found', status: 'failed' });
+            return res.status(404).json({ message: "User body information not found", status: 'failed' });
         }
 
         if (weight !== undefined && weight !== "") {
