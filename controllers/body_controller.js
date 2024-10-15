@@ -36,7 +36,7 @@ const Create_User_Body = async (req, res) => {
         res.status(201).json({ message: "Body Created successfully", code: 201, body: body,/*  user: req.user */ });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: 'Internal Server Error', status: 'failed' });
+        res.status(500).json({ message: 'Internal Server Error', status: "failed" });
     }
 };
 const Update_Body = async (req, res) => {
