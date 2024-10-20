@@ -66,7 +66,7 @@ const Update_Body = async (req, res) => {
         res.status(200).json({ message: "Body Updated successfully", code: 200, body: existingBody, status: "success" });
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: 'Internal Server Error', status: "failed" });
+        res.status(500).json({ message: "Internal Server Error", status: "failed" });
     }
 };
 
