@@ -90,7 +90,7 @@ const Get_User_Body = async (req, res) => {
             return res.status(403).json({ message: "Body data not found for the user.", status: 'failed', userId: userId });
         }
 
-        res.status(200).json({ message: 'Body data retrieved successfully', bodyData: bodyData, code: 200, });
+        res.status(200).json({ message: "Body data retrieved successfully", bodyData: bodyData, code: 200, });
 
     } catch (error) {
         console.error(error);
