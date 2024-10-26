@@ -36,7 +36,7 @@ const Task_Create = async (req, res) => {
         const userId = req?.user?.id
         upload.single('taskImage')(req, res, async function (err) {
             if (err) {
-                return res.status(400).json({ message: 'File upload failed.', error: err, status: 'failed', code: 400 });
+                return res.status(400).json({ message: 'File upload failed.', error: err, status: "failed", code: 400 });
             }
 
             const { exercise, set, reps } = req.body;
