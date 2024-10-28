@@ -39,7 +39,7 @@ const create_Join_post = async (req, res) => {
             const { title, name, reps, set } = req.body;
 
             if (!title || !name || !reps || !set || !req.file) {
-                return res.status(400).json({ status: 'failed', message: "All Fields and Image Are Required" });
+                return res.status(400).json({ status: "failed", message: "All Fields and Image Are Required" });
             }
 
             console.log(userId)
