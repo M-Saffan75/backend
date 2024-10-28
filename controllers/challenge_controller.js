@@ -34,7 +34,7 @@ const create_Join_post = async (req, res) => {
         const userId = req.user._id;
         challengeImage.single('challengeImage')(req, res, async function (err) {
             if (err) {
-                return res.status(401).json({ status: 'failed', message: "File upload failed." });
+                return res.status(401).json({ status: "failed", message: "File upload failed." });
             }
             const { title, name, reps, set } = req.body;
 
