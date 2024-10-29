@@ -35,7 +35,7 @@ const Demo_Task_Create = async (req, res) => {
     try {
         upload.single('taskImage')(req, res, async function (err) {
             if (err) {
-                return res.status(401).json({ message: 'File upload failed.', error: err, status: "failed" });
+                return res.status(401).json({ message: "File upload failed.", error: err, status: "failed" });
             }
 
             const { exercise, set, reps } = req.body;
