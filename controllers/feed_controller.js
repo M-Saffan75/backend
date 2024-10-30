@@ -50,7 +50,7 @@ const create_feed_post = async (req, res) => {
             });
 
             await userFeed.save();
-            res.status(200).json({ message: 'Feed successfully Post', code: 200, user: req.user, Feeds: userFeed });
+            res.status(200).json({ message: "Feed successfully Post", code: 200, user: req.user, Feeds: userFeed });
         });
     } catch (error) {
         console.error(error);
