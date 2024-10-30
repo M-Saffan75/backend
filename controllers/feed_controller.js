@@ -33,7 +33,7 @@ const create_feed_post = async (req, res) => {
     try {
         feedImage.single('feedImage')(req, res, async function (err) {
             if (err) {
-                return res.status(401).json({ message: 'File upload failed.' });
+                return res.status(401).json({ message: "File upload failed." });
             }
             const { description } = req.body;
 
