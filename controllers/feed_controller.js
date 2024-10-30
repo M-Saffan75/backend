@@ -38,7 +38,7 @@ const create_feed_post = async (req, res) => {
             const { description } = req.body;
 
             if (!description || !req.file) {
-                return res.status(400).json({ message: 'All Fields and Image Are Required' });
+                return res.status(400).json({ message: "All Fields and Image Are Required" });
             }
             const userId = req.user._id;
             // console.log('userId>>>???', userId)
