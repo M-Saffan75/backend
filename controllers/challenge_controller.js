@@ -108,7 +108,7 @@ const Single_Challenge = async (req, res) => {
             return res.status(404).json({ message: 'Blog not found.', status: 'failed' });
         }
 
-        res.status(200).json({ message: 'Challenge retrieved successfully', challenges: challenges, code: 200, });
+        res.status(200).json({ message: "Challenge retrieved successfully", challenges: challenges, code: 200, });
 
     } catch (error) {
         console.error(error);
