@@ -57,7 +57,7 @@ const create_Join_post = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ status: "failed", message: 'Internal Server Error' });
+        res.status(500).json({ status: "failed", message: "Internal Server Error" });
     }
 }
 
