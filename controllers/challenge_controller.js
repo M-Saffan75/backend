@@ -53,7 +53,7 @@ const create_Join_post = async (req, res) => {
                 challengeImage: req.file.filename,
             });
             await user.save();
-            res.status(200).json({ message: 'Challenge successfully Post', user: req.user, code: 200 });
+            res.status(200).json({ message: "Challenge successfully Post", user: req.user, code: 200 });
         });
     } catch (error) {
         console.error(error);
