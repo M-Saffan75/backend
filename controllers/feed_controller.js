@@ -98,7 +98,7 @@ const fetch_feed = async (req, res) => {
         const feeds = await Feed.find().populate('user_id');
         
         if (!feeds || feeds.length === 0) {
-            return res.status(404).json({ message: 'Feeds not found.' });
+            return res.status(404).json({ message: "Feeds not found." });
         } 
 
         feeds.forEach(feed => {
