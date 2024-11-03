@@ -78,7 +78,7 @@ const fetch_challenge = async (req, res) => {
         const challenges = await Challenge.find().populate('user_id');
 
         if (!challenges || challenges.length === 0) {
-            return res.status(404).json({ message: 'Challenges not found.' });
+            return res.status(404).json({ message: "Challenges not found." });
         }
 
         challenges.forEach(challenge => {
