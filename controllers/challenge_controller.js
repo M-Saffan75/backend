@@ -105,7 +105,7 @@ const Single_Challenge = async (req, res) => {
     try {
         const challenges = await Challenge.findById(req.params.id).populate('user_id');
         if (!challenges|| challenges.length === 0) {
-            return res.status(404).json({ message: 'Blog not found.', status: 'failed' });
+            return res.status(404).json({ message: "Blog not found.", status: 'failed' });
         }
 
         res.status(200).json({ message: "Challenge retrieved successfully", challenges: challenges, code: 200, });
