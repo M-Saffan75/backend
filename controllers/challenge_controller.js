@@ -87,7 +87,7 @@ const fetch_challenge = async (req, res) => {
             challenge.JoinAdd = joinedByUser;
         });
 
-        res.status(200).json({ message: 'Challenges retrieved successfully', challenges: challenges });
+        res.status(200).json({ message: "Challenges retrieved successfully", challenges: challenges });
     } catch (error) {
         console.log(error);
         res.status(500).json({ message: 'Internal Server Error', error: error.message });
