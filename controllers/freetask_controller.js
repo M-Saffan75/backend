@@ -41,7 +41,7 @@ const Demo_Task_Create = async (req, res) => {
             const { exercise, set, reps } = req.body;
 
             if (!exercise || !set || !reps || !req.file) {
-                return res.status(400).json({ message: "All Fields Are Required", status: 'failed' });
+                return res.status(400).json({ message: "All Fields Are Required", status: "failed" });
             }
 
             const newTask = new FreeTask({
