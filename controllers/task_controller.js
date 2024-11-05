@@ -42,7 +42,7 @@ const Task_Create = async (req, res) => {
             const { exercise, set, reps } = req.body;
 
             if (!exercise || !set || !reps || !req.file) {
-                return res.status(401).json({ message: "All Fields Are Required", status: 'failed', code: 401 });
+                return res.status(401).json({ message: "All Fields Are Required", status: 'failed", code: 401 });
             }
 
             const newTask = new Task({
