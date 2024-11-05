@@ -65,7 +65,7 @@ const Demo_Task_Create = async (req, res) => {
 const Demo_Get_Task = async (req, res) => {
     try {
         const tasks = await FreeTask.find();
-        return res.status(200).json({ message: 'Tasks Retrieved Successfully', tasks: tasks });
+        return res.status(200).json({ message: "Tasks Retrieved Successfully", tasks: tasks });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ message: 'Internal Server Error' });
