@@ -131,7 +131,7 @@ const Register_Here = async (req, res) => {
         const token = jwt.sign({ userID: user._id }, process.env.ACCESS_SECRET_KEY, { expiresIn: '5d' });
 
         res.status(200).json({
-            message: 'User registered successfully. Email verification OTP sent.',
+            message: "User registered successfully. Email verification OTP sent.",
             user: user,
             token: token,
             code: 200,
