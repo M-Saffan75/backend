@@ -95,7 +95,7 @@ const Register_Here = async (req, res) => {
         const errors = emailRegex.test(email);
 
         if (!errors) {
-            return res.status(403).json({ message: "Please provide a valid email address", status: 'failed', code: 403 });
+            return res.status(403).json({ message: "Please provide a valid email address", status: "failed", code: 403 });
         }
 
         if (!name || !email || !password || !roletype) {
