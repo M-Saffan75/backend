@@ -318,7 +318,7 @@ const Update_Profile = async (req, res) => {
     try {
         upload.single('profileImage')(req, res, async function (err) {
             if (err) {
-                return res.status(402).json({ message: 'File upload failed.', status: "failed", code: 402 });
+                return res.status(402).json({ message: "File upload failed.", status: "failed", code: 402 });
             }
             if (req.file) {
                 const updatedUser = await User.findByIdAndUpdate(
