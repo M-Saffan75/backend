@@ -326,7 +326,7 @@ const Update_Profile = async (req, res) => {
                     { profileImage: req.file.filename },
                     { new: true }
                 );
-                return res.status(200).json({ message: 'Image uploaded successfully.', code: 200, updatedUser: updatedUser, });
+                return res.status(200).json({ message: "Image uploaded successfully.", code: 200, updatedUser: updatedUser, });
             } else {
                 return res.status(400).json({ message: 'No file uploaded.', status: 'failed', code: 400 });
             }
