@@ -355,7 +355,7 @@ const All_User = async (req, res) => {
         res.status(200).json({ message: "Total user count fetched successfully", count: userCount, code: 200 });
     } catch (error) {
         console.error('Error during user count retrieval:', error.message);
-        res.status(500).json({ message: 'Internal Server Error', error: error.message, status: 'failed" });
+        res.status(500).json({ message: 'Internal Server Error', error: error.message, status: "failed" });
     }
 };
 
