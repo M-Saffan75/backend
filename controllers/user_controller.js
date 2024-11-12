@@ -333,7 +333,7 @@ const Update_Profile = async (req, res) => {
         });
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Server Error", status: "failed" });
+        return res.status(500).json({ message: "Server Error", status: "failed" });
     }
 };
 
